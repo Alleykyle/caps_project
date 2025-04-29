@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Civil Service Certification</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { display: flex; flex-direction: column; align-items: center; background-color: #f9f9f9; }
+
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 90%; padding: 15px 0; border-bottom: 2px solid #ddd;
+    }
+
+    .logo { width: 60px; }
+    header h1 { color: #172a64; font-size: 22px; font-weight: bold; text-align: center; flex: 1; }
+    header p { color: #172a64; font-size: 16px; font-weight: bold; }
+    .menu-icon { font-size: 24px; cursor: pointer; }
+
+    .container { display: flex; width: 90%; margin-top: 20px; }
+
+    .sidebar { width: 250px; padding: 15px; }
+    .sidebar ul { list-style: none; }
+    .sidebar li {
+      font-size: 16px; font-weight: bold; padding: 10px;
+      color: #172a64; cursor: pointer;
+    }
+    .sidebar .active { color: #c6a126; }
+
+    main {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center;
+    }
+
+    .form-container {
+      border: 2px solid #172a64;
+      padding: 20px;
+      width: 400px;
+      background: white;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      margin: 10px 0 5px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 8px;
+      border: none;
+      border-bottom: 1px solid black;
+      outline: none;
+      font-size: 16px;
+    }
+
+    select.input-field {
+      border: 1px solid #172a64;
+      border-radius: 4px;
+      padding: 10px;
+    }
+
+    .button-group {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      width: 400px;
+    }
+
+    .prev-btn, .next-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .prev-btn { background-color: #ddd; }
+    .next-btn { background-color: black; color: white; }
+
+    .form-step {
+      display: none;
+    }
+
+    .form-step.active {
+      display: block;
+    }
+
+    /* Step 3: Upload Box Styling */
+    .upload-box {
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+      cursor: pointer;
+      color: #555;
+      margin-top: 10px;
+      background-color: #f9f9f9;
+    }
+
+    .upload-box i {
+      font-size: 36px;
+      color: #888;
+    }
+
+    .upload-box p {
+      margin-top: 10px;
+    }
+
+    .upload-box input {
+      opacity: 0;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    /* Signature Box Styling */
+    .signature-container {
+      border: 2px dashed #ccc;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      width: 100%;
+      height: 300px;
+    }
+
+    .signature-container p {
+      color: #172a64;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    .signature-box {
+      border: 1px solid #172a64;
+      width: 100%;
+      height: 100%;
+      background-color: #f0f0f0;
+      position: relative;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #999;
+      font-size: 14px;
+    }
+
+    /* Preview Box Styling */
+    .preview-box {
+      background-color: #f9f9f9;
+      border: 2px solid #172a64;
+      padding: 20px;
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .preview-box p {
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .preview-box .preview-header {
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="/static/images/DILG-Logo.png" alt="DILG Logo" class="logo">
+  <h1>CIVIL SERVICE CERTIFICATION</h1>
+  <p>Request Application</p>
+  <div class="menu-icon">
+    <i class="fas fa-bars"></i>
+  </div>
+</header>
+
+<div class="container">
+  <nav class="sidebar">
+    <ul>
+      <li class="active">REQUEST LETTER</li>
+      <li>APPLICATION LETTER</li>
+      <li>VALID ID</li>
+      <li>SIGNATURE</li>
+      <li>CERTIFICATE</li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="form-container">
+
+      <!-- Step 1 -->
+      <div class="form-step active">
+        <label>LAST NAME</label>
+        <input type="text" class="input-field" id="last-name">
+        <label>FIRST NAME</label>
+        <input type="text" class="input-field" id="first-name">
+        <label>MIDDLE INITIAL</label>
+        <input type="text" class="input-field" id="middle-initial">
+      </div>
+
+      <!-- Step 2 -->
+      <div class="form-step">
+        <label for="certifying-official">CERTIFICATION FROM THE FOLLOWING OFFICIAL</label>
+        <select id="certifying-official" class="input-field">
+          <option value="Punong Barangay">Punong Barangay</option>
+          <option value="DILG - Municipality">DILG - Municipality</option>
+          <option value="DILG - Provincial">DILG - Provincial</option>
+          <option value="DILG - Regional">DILG - Regional</option>
+        </select>
+      </div>
+
+      <!-- Step 3: Upload Back-to-Back ID -->
+      <div class="form-step">
+        <label style="font-size: 18px;">UPLOAD BACK TO BACK ID</label>
+        <div style="margin: 10px 0;">Front.jpeg</div>
+        <div class="upload-box">
+          <i class="fa-solid fa-image"></i>
+          <p>Upload Image here</p>
+          <input type="file" accept="image/*">
+        </div>
+      </div>
+
+      <!-- Step 4: Signature -->
+      <div class="form-step">
+        <label for="signature">SIGNATURE</label>
+        <div class="signature-container">
+          <div class="signature-box">
+            <p>Signature Here</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5: Preview -->
+      <div class="form-step">
+        <div class="preview-box">
+          <div class="preview-header">Review Your Information:</div>
+          <p><strong>Last Name:</strong> <span id="preview-last-name"></span></p>
+          <p><strong>First Name:</strong> <span id="preview-first-name"></span></p>
+          <p><strong>Middle Initial:</strong> <span id="preview-middle-initial"></span></p>
+          <p><strong>Certifying Official:</strong> <span id="preview-certifying-official"></span></p>
+          <p><strong>Uploaded ID:</strong> Front.jpeg</p>
+          <p><strong>Signature:</strong> Signature Here</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="button-group">
+      <button class="prev-btn" onclick="changeStep(-1)">← Previous</button>
+      <button class="next-btn" id="next-button" onclick="changeStep(1)">Next →</button>
+    </div>
+  </main>
+</div>
+
+<script>
+  let currentStep = 0;
+  const steps = document.querySelectorAll('.form-step');
+  const nextButton = document.getElementById('next-button');
+
+  function showStep(index) {
+    steps.forEach((step, i) => {
+      step.classList.toggle('active', i === index);
+    });
+  }
+
+  function changeStep(direction) {
+    currentStep += direction;
+    if (currentStep < 0) currentStep = 0;
+    if (currentStep >= steps.length) currentStep = steps.length - 1;
+    showStep(currentStep);
+
+    // Update Preview (Step 5)
+    if (currentStep === 4) {
+      document.getElementById('preview-last-name').textContent = document.getElementById('last-name').value;
+      document.getElementById('preview-first-name').textContent = document.getElementById('first-name').value;
+      document.getElementById('preview-middle-initial').textContent = document.getElementById('middle-initial').value;
+      document.getElementById('preview-certifying-official').textContent = document.getElementById('certifying-official').value;
+      nextButton.textContent = "Finished"; // Change to "Finished" when on the preview step
+    }
+    
+    // When the user clicks Finished
+    if (currentStep === steps.length - 1 && nextButton.textContent === "Finished") {
+      alert("Form submitted!"); // You can replace this with your actual submit logic
+    }
+  }
+</script>
+
+</body>
+</html>

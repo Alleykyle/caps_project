@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Employees Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background-color: #fff5dd;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #ccc;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: #003366;
+      padding: 15px 20px;
+      width: 100%;
+      text-align: left;
+      transition: 0.3s;
+      font-weight: 500;
+    }
+
+    .sidebar a:hover {
+      background-color: #f0f0f0;
+    }
+
+    .active {
+      background-color: #dcc990;
+      border-left: 4px solid red;
+    }
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      background: url('https://www.transparenttextures.com/patterns/cubes.png');
+      background-size: cover;
+      padding: 20px;
+    }
+
+    .header {
+      color: white;
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .search-container {
+      text-align: right;
+      margin-bottom: 20px;
+    }
+
+    .search-bar {
+      padding: 8px 12px;
+      width: 250px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #ccc;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      margin: 5px 0;
+      font-size: 16px;
+    }
+
+    .card p {
+      font-size: 14px;
+      margin: 4px 0;
+    }
+
+    .card input, .card select {
+      width: 80%;
+      padding: 5px;
+      margin-top: 5px;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+    }
+
+    .buttons {
+      margin-top: 10px;
+    }
+
+    .buttons button {
+      padding: 6px 10px;
+      border: none;
+      border-radius: 5px;
+      margin: 3px;
+      cursor: pointer;
+    }
+
+    .edit-btn {
+      background-color: #111;
+      color: white;
+    }
+
+    .save-btn {
+      background-color: #003366;
+      color: white;
+    }
+
+    .delete-btn {
+      background-color: #ccc;
+      color: black;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: #333;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/DILG_Seal.svg/2048px-DILG_Seal.svg.png" alt="DILG Logo">
+    </div>
+    <ul>
+      <li class="active"><a href={% url 'dashboard' %}>Dashboard</a></li>
+      <li><a href={% url 'application_request' %}>Application Request</a></li>
+      <li><a href={% url 'history' %}>History</a></li>
+      <li><a href={% url 'employees_profile' %}>Employees Profile</a></li>
+      <li><a href={% url 'fold' %}>Folders</a></li>
+    </ul>
+  </div>
+
+  <!-- Main content -->
+  <div class="main-content">
+    <div class="header">Employees Profile</div>
+
+    <div class="search-container">
+      <input class="search-bar" type="text" placeholder="Search...">
+    </div>
+
+    <div class="card-grid">
+      <!-- Display mode card -->
+      <div class="card">
+        <img src="" alt="Profile">
+        <h3>Mary Dhil Saromines</h3>
+        <p>Id no. : 123</p>
+        <p>Task Assign: Monitoring</p>
+        <div class="buttons">
+          <button class="edit-btn">Edit</button>
+        </div>
+      </div>
+
+      <!-- Editable mode card -->
+      <div class="card">
+        <img src="" alt="Profile">
+        <h3>Mary Dhil Saromines</h3>
+        <p>
+          Id no. : <input type="text" value="123" />
+        </p>
+        <p>
+          Task Assign:
+          <select>
+            <option>Monitoring</option>
+            <option>Documentation</option>
+          </select>
+        </p>
+        <div class="buttons">
+          <button class="icon-btn" title="Delete">&#128465;</button>
+          <button class="save-btn">Save</button>
+        </div>
+      </div>
+
+      <!-- More blank cards as placeholders -->
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+    </div>
+  </div>
+
+</body>
+</html>

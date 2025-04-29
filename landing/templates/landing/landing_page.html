@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DILG Landing Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('/static/background.jpg') no-repeat center center;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+        .menu {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+        }
+        .menu a {
+            display: block;
+            color: white;
+            font-size: 18px;
+            padding: 10px;
+            text-decoration: none;
+        }
+        .menu a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <img src="/static/images/DILG-Logo.png" alt="DILG Logo" class="logo">
+    <div class="menu">
+        <a href={% url 'monitoring_calendar' %}>Monitoring Calendar</a>
+        <a href={% url 'csc_page' %}>Civil Service Certification (CSC)</a>
+        <a href={% url 'dashboard' %}>Dashboard</a>
+    </div>
+</body>
+</html>

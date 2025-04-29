@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Application Request</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      display: flex;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    .sidebar {
+      width: 240px;
+      background-color: #fff5dd;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid #ccc;
+    }
+    .sidebar .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .sidebar .logo img {
+      width: 100px;
+    }
+    .sidebar ul {
+      list-style: none;
+    }
+    .sidebar ul li {
+      padding: 15px;
+      color: #222;
+      font-weight: 600;
+      cursor: pointer;
+      border-left: 5px solid transparent;
+    }
+    .sidebar ul li.active,
+    .sidebar ul li:hover {
+      background-color: #f2e9c9;
+      border-left: 5px solid #d8b400;
+    }
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .top-bar {
+      background: #1b1f61;
+      color: white;
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .top-bar h1 {
+      font-size: 22px;
+    }
+    .top-bar .profile-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: #e6007e;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    .content-area {
+      padding: 30px;
+      background: url('https://www.transparenttextures.com/patterns/cubes.png');
+      background-size: cover;
+      height: 100%;
+      overflow-y: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    thead {
+      background-color: #f4f4f4;
+    }
+    th, td {
+      padding: 16px;
+      text-align: left;
+      font-size: 14px;
+    }
+    tbody tr {
+      border-top: 1px solid #ddd;
+    }
+    tbody tr:hover {
+      background-color: #fafafa;
+    }
+    .highlight {
+      background-color: #f6e8c1;
+      border-left: 4px solid #0053ba;
+    }
+    .dot {
+      height: 16px;
+      width: 16px;
+      background-color: #1c1c5d;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 12px;
+    }
+    .status-pending {
+      color: #cc9a06;
+      font-weight: bold;
+    }
+    .status-done {
+      color: #2d9d2d;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">
+      <img src="/static/images/DILG-Logo.png" alt="DILG Logo" class="logo" alt="DILG Logo">
+    </div>
+    <ul>
+      <li class="active"><a href={% url 'dashboard' %}>Dashboard</a></li>
+      <li><a href={% url 'application_request' %}>Application Request</a></li>
+      <li><a href={% url 'history' %}>History</a></li>
+      <li><a href={% url 'employees_profile' %}>Employees Profile</a></li>
+      <li><a href={% url 'fold' %}>Folders</a></li>
+      {% comment %} 
+      <li><a href={% url 'settings' %}>Settings</a></li> {% endcomment %}
+    </ul>
+  </div>
+  <div class="main-content">
+    <div class="top-bar">
+      <h1>Application Request</h1>
+      <div class="profile-icon">E</div>
+    </div>
+    <div class="content-area">
+    </div>
+  </div>
+</body>
+</html>

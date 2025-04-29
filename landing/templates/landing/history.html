@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>History</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      background-color: #fdfaf5;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background-color: white;
+      border-right: 1px solid #ddd;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+    }
+
+    .logo {
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: #003366;
+      padding: 15px 20px;
+      width: 100%;
+      text-align: left;
+      transition: 0.3s;
+      font-weight: 500;
+    }
+
+    .sidebar a:hover {
+      background-color: #f0f0f0;
+    }
+
+    .active {
+      background-color: #dcc990;
+      border-left: 4px solid red;
+    }
+
+    /* Content */
+    .main-content {
+      flex: 1;
+    }
+
+    .header {
+      background-color: #0e2a52;
+      color: white;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .table-header {
+      background-color: #f7f2ea;
+      padding: 15px 30px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 2px solid #003366;
+    }
+
+    .table-content {
+      padding: 0 30px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ccc;
+      padding: 20px 0;
+    }
+
+    .highlight {
+      background-color: #f4e7bc;
+    }
+
+    .activity {
+      display: flex;
+      align-items: center;
+      max-width: 50%;
+    }
+
+    .dot {
+      width: 20px;
+      height: 20px;
+      background-color: #001f4d;
+      border-radius: 50%;
+      margin-right: 15px;
+    }
+
+    .right {
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+
+    <ul>
+        <li class="active"><a href={% url 'dashboard' %}>Dashboard</a></li>
+        <li><a href={% url 'application_request' %}>Application Request</a></li>
+        <li><a href={% url 'history' %}>History</a></li>
+        <li><a href={% url 'employees_profile' %}>Employees Profile</a></li>
+        <li><a href={% url 'fold' %}>Folders</a></li>
+        {% comment %} 
+        <li><a href={% url 'settings' %}>Settings</a></li> {% endcomment %}
+      </ul>
+
+  <div class="main-content">
+    <div class="header">History</div>
+    <div class="table-header">
+      <div>ACTIVITIES</div>
+      <div>DATE</div>
+      <div>PROCESSED BY</div>
+    </div>
+    <div class="table-content">
+      <div class="row">
+        <div class="activity">
+          <div class="dot"></div>
+          <span>Application Form no. 12, APPROVED by meow meow meow</span>
+        </div>
+        <div>April 1, 2025</div>
+        <div class="right">Leslie Faith D. Navaja</div>
+      </div>
+
+      <div class="row">
+        <div class="activity">
+          <div class="dot"></div>
+          <span>Application form no.23, DENIED bu meow meow.</span>
+        </div>
+        <div>April 1, 2025</div>
+        <div class="right">Leslie Faith D. Navaja</div>
+      </div>
+
+      <div class="row highlight">
+        <div class="activity">
+          <div class="dot"></div>
+          <span>Approval of Application Form. Meow meow meow from markeugine@gmail.com</span>
+        </div>
+        <div>April 1, 2025</div>
+        <div class="right">Leslie Faith D. Navaja</div>
+      </div>
+
+      <!-- Repeat rows -->
+      <div class="row">
+        <div class="activity">
+          <div class="dot"></div>
+          <span>Approval of Application Form. Meow meow meow from markeugine@gmail.com</span>
+        </div>
+        <div>April 1, 2025</div>
+        <div class="right">Leslie Faith D. Navaja</div>
+      </div>
+
+      <div class="row">
+        <div class="activity">
+          <div class="dot"></div>
+          <span>Approval of Application Form. Meow meow meow from markeugine@gmail.com</span>
+        </div>
+        <div>April 1, 2025</div>
+        <div class="right">Leslie Faith D. Navaja</div>
+      </div>
+
+      <div class="row">
+        <div class="activity">
+          <div class="dot"></div>
+          <span>Approval of Application Form. Meow meow meow from markeugine@gmail.com</span>
+        </div>
+        <div>April 1, 2025</div>
+        <div class="right">Leslie Faith D. Navaja</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

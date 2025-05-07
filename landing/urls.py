@@ -10,6 +10,9 @@ from .views import employees_profile
 from .views import history
 from .views import fold
 from .views import settings
+from django.urls import path
+from . import views
+
 
 app_name = 'landing'
 
@@ -24,8 +27,10 @@ urlpatterns = [
     path('application_request/', application_request, name = 'application_request'),
     path('history/', history, name = 'history'),
     path('employees_profile/', employees_profile, name = 'employees_profile'),
-    path('fold/', fold, name = 'fold'),
+    path('folders/', views.fold, name='fold'),
+    path('delete/<int:file_id>/', views.delete_file, name='delete_file'),
     path('settings/', settings, name = 'settings'),
+    
 
 
 ]

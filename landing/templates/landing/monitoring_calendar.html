@@ -1,122 +1,282 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report Monitoring Calendar</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .sidebar {
-            width: 250px;
-            height: 100vh;
-            background: #f4e1b9;
-            padding: 10px;
-            overflow-y: auto;
-        }
-        .barangay-item {
-            border: 1px solid green;
-            padding: 8px;
-            margin: 5px 0;
-            cursor: pointer;
-        }
-        .barangay-item.urgent {
-            border: 1px solid red;
-            color: red;
-        }
-        .content {
-            flex-grow: 1;
-            padding: 20px;
-            background: #ded0aa;
-        }
-        .status-dropdown {
-            background: green;
-            color: white;
-            padding: 8px;
-            text-align: center;
-            cursor: pointer;
-        }
-        .status-dropdown:hover {
-            background: darkgreen;
-        }
-        /* Optional: Add hover effects to sidebar items */
-        .barangay-item:hover {
-            background-color: #f0f0f0;
-        }
-        /* Optional: Add active state for the filter buttons */
-        .btn.active {
-            background-color: #007bff;
-            color: white;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Report Monitoring Calendar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      overflow: hidden;
+    }
+    .center-heading {
+        text-align: center;
+        margin: 20px auto;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+      padding: 10px 20px;
+      border-bottom: 2px solid #ccc;
+    }
+    header img.logo {
+      height: 50px;
+      margin-right: 10px;
+    }
+    .dilg-logo,
+    .Smartfilex_logo {
+      height: 60px;  
+    }
+    .header-center {
+      flex: 1;
+      text-align: center;
+    }
+    .header-center h4 {
+      margin: 0;
+      font-weight: bold;
+    }
+    .sidebar {
+      position: fixed;
+      top: 82px;
+      left: 0;
+      width: 180px;
+      height: calc(100vh - 82px);
+      background: #eee;
+      overflow-y: auto;
+      border-right: 1px solid #ccc;
+    }
+    .barangay-item {
+        background-color: #ffffff;
+        padding: 12px 16px;
+        margin-bottom: 8px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+        font-weight: 500;
+        color: black;
+        border-left: 5px solid transparent;
+    }
+    .barangay-item:hover {
+      background: #c7ab44a9;
+    }
+    .barangay-item.active {
+        background-color: #c7ab44a9;
+        color: #fff;
+        border-left: 5px solid #c7ab44a9;
+    }
+    .main {
+      margin-left: 180px;
+      margin-top: 22px;
+      padding: 20px;
+      height: calc(100vh - 82px);
+      overflow-y: auto;
+      background: white;
+    }
+    .tab-buttons .btn {
+      margin-right: 5px;
+    }   
+    .task-panel {
+      background: #F0F8FF; 
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 1px;
+    }
+    .task-panel h5 {
+      margin-bottom: 10px;   
+    }
+    .task-list {
+      background: #F0F8FF;
+      border-radius: 10px;
+      padding: 15px;
+    }
+    .task-list div {
+        margin-bottom: 10px;  
+        display: flex;
+        align-items: center;
+        font-size: 15px;
+    }
+    .status-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        font-size: 14px;
+        color: #888;
+        margin-top: 10px;
+    }
+    .left-status {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .right-status {
+    text-align: right;
+    }
+
+    .edit-icon {
+    font-style: normal;
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 4px;
+    }
+
+    .status-row span {
+      font-style: italic;
+    }
+
+    .form-select w-auto {
+      margin-top: 10px;
+    }
+
+    .home-icon {
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 15px;
+  padding-left: 190px;
+  
+}
+
+.filters button {
+  margin-right: 5px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border-radius: 6px;
+}
+.filter-select{
+  margin-right: 5px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border-radius: 6px;
+  background-color: white;
+}
+.filter-select:hover{
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
+.search-box input {
+  height: 38px;
+  padding: 6px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.filters button:hover{
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
+  </style>
 </head>
 <body>
-    <div class="d-flex">
-        <!-- Sidebar with filters and barangay list -->
-        <div class="sidebar">
-            <button class="btn btn-primary w-100 mb-2 filter-btn" data-filter="weekly">WEEKLY</button>
-            <button class="btn btn-secondary w-100 mb-2 filter-btn" data-filter="monthly">MONTHLY</button>
-            <button class="btn btn-secondary w-100 mb-2 filter-btn" data-filter="semestral">SEMESTRAL</button>
-            <button class="btn btn-secondary w-100 mb-2 filter-btn" data-filter="quarterly">QUARTERLY</button>
-            <button class="btn btn-secondary w-100 mb-2 filter-btn" data-filter="annually">ANNUALLY</button>
 
-            <!-- Barangay List -->
-            <div class="mt-3">
-                <div class="barangay-item">BRGY. 1</div>
-                <div class="barangay-item">BRGY. 2</div>
-                <div class="barangay-item urgent">BRGY. 3 !</div>
-                <div class="barangay-item">BRGY. 4</div>
-                <div class="barangay-item urgent">BRGY. 5 !</div>
-            </div>
-        </div>
+<header>
+  <div class="header-left">
+    <img src="{% static 'images/DILG-Logo.png' %}" class="dilg-logo" alt="dilg-logo">
+    <img src="{% static 'images/Smartfilex.png' %}" class="Smartfilex_logo" alt="Smartfilex_logo">
+    <span style="margin-left: 10px; font-weight: bold;">SMARTFILEX</span>
+  </div>
+  <div class="header-center">
+    <h4>Requirements Monitoring</h4>
+  </div>
+  <div class="home-icon">
+    <img src="{% static 'images/home.png' %}" alt="Home" style="width: 24px; height: 24px; cursor: pointer;"/>
+  </div>
+</header>
 
-        <!-- Content Area -->
-        <div class="content">
-            <h2 class="text-center">REPORT MONITORING CALENDAR</h2>
-            <div class="bg-success text-white p-2">BRGY. 1</div>
-            <h4 class="mt-3">Task Title</h4>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla auctor dolor vitae velit ultricies, nec maximus ligula sollicitudin.</p>
-            
-            <!-- Dropdown for Status -->
-            <label for="status-select" class="form-label">Status</label>
-            <select id="status-select" class="form-select">
-                <option value="accomplished">ACCOMPLISHED</option>
-                <option value="not_accomplished">NOT ACCOMPLISHED</option>
-                <option value="pending">PENDING</option>
-            </select>
-        </div>
+<div class="sidebar">
+  <div class="barangay-item active">BRGY. 1</div>
+  <div class="barangay-item">BRGY. 2</div>
+  <div class="barangay-item">BRGY. 3</div>
+  <div class="barangay-item">BRGY. 4</div>
+  <div class="barangay-item">BRGY. 5</div>
+  <!-- Add up to BRGY. 25 -->
+</div>
+<div class="top-bar">
+    <div class="filters">
+      <button>Weekly</button>
+      <button>Monthly</button>
+      <button>Semestral</button>
+      <button>Quarterly</button>
+      <button>Annually</button>
     </div>
+    <div class="search-box">
+      <input type="text" placeholder="Search..." />
+    </div>
+  </div>
+  
+<div class="main">
+    <div id="status-container" class="p-3 rounded">
+        <div class="task-panel">
+            <select class="filter-select">
+                <option>Week 25</option>
+            </select>
+            <div class="center-heading">
+                <h4>BARANGAY 25</h4>
+                <div class="text-muted">May 5, 2025</div>
+            </div>
+              
+        
+            <div class="task-list mt-3">
+                <div><input type="checkbox" checked> Barangay Road Clean up Operation (BARCO)</div>
+                <div><input type="checkbox" checked> Barangay Road Clean up Operation (BARCO)</div>
+                <div><input type="checkbox" checked> Barangay Road Clean up Operation (BARCO)</div>
+                <div><input type="checkbox" checked> Barangay Road Clean up Operation (BARCO)</div>
+              
+                <div class="dropdown-select mt-3">
+                  <label for="status-select">Status</label>
+                  <select id="status" onchange="updateBackgroundColor(this)" style="width: 100%; padding: 0.5em;">
+                    <option value="accomplished">Accomplished</option>
+                    <option value="pending">Pending</option>
+                    <option value="not-accomplished">Not Accomplished</option>
+                  </select>                
+                </div>
+              
+                <div class="status-row mt-3">
+                  <div class="left-status">
+                    <span>Status: Accomplished <i class="edit-icon">✎</i></span><br>
+                    <span>Due Date: May 20, 2025 <i class="edit-icon">✎</i></span>
+                  </div>
+                  <div class="right-status">
+                    <span>Last Updated: May 5, 2025 <i class="edit-icon">✎</i></span>
+                  </div>
+                </div>
+              </div>          
+          </div>
+    </div>
+  
+</div>
 
-    <!-- JS Scripts for button functionality and active state -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Toggle the active class for filter buttons
-        document.querySelectorAll('.filter-btn').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                // Remove active class from all buttons
-                document.querySelectorAll('.filter-btn').forEach(function(button) {
-                    button.classList.remove('active');
-                });
-
-                // Add active class to the clicked button
-                this.classList.add('active');
-
-                // Filter logic can be implemented here
-                var filter = this.getAttribute('data-filter');
-                console.log('Selected filter: ' + filter);
-                
-                // Implement calendar filter based on the selected filter (Weekly, Monthly, etc.)
-            });
-        });
-
-        // Example: Show urgent tasks in red or add extra actions based on the state
-        document.querySelectorAll('.barangay-item').forEach(function(item) {
-            item.addEventListener('click', function() {
-                alert('You clicked on ' + this.textContent);
-            });
-        });
+<script>
+    function updateBackgroundColor(selectElement) {
+        const container = document.getElementById("status-container");
+        const value = selectElement.value.toLowerCase();
+    
+        if (value === "not-accomplished") {
+            container.style.backgroundColor = "#E92323"; 
+        } else if (value === "pending") {
+            container.style.backgroundColor = "#2F3A7E"; 
+        } else if (value === "accomplished") {
+            container.style.backgroundColor = "#2ecc71"; 
+        }
+    }
     </script>
+    
+    
+  
 </body>
 </html>

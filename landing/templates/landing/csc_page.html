@@ -3,82 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Civil Service Certification</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+  <title>Step-by-Step Application Form</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-    body { display: flex; flex-direction: column; align-items: center; background-color: #f9f9f9; }
+    /* your existing styles unchanged */
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
 
-    header {
-      display: flex; align-items: center; justify-content: space-between;
-      width: 90%; padding: 15px 0; border-bottom: 2px solid #ddd;
+    body {
+      display: flex;
+      min-height: 100vh;
+      background-color: #f9f9f9;
     }
 
-    .logo { width: 60px; }
-    header h1 { color: #172a64; font-size: 22px; font-weight: bold; text-align: center; flex: 1; }
-    header p { color: #172a64; font-size: 16px; font-weight: bold; }
-    .menu-icon { font-size: 24px; cursor: pointer; }
-
-    .container { display: flex; width: 90%; margin-top: 20px; }
-
-    .sidebar { width: 250px; padding: 15px; }
-    .sidebar ul { list-style: none; }
-    .sidebar li {
-      font-size: 16px; font-weight: bold; padding: 10px;
-      color: #172a64; cursor: pointer;
+    .info-sidebar {
+      width: 250px;
+      padding: 20px;
+      background-color: #f4f4f4;
+      border-right: 2px solid #ddd;
     }
-    .sidebar .active { color: #c6a126; }
 
-    main {
-      flex: 1; display: flex; flex-direction: column;
-      align-items: center;
+    .sidebar-header {
+      font-size: 18px;
+      color: #172a64;
+      cursor: pointer;
+      padding: 8px;
+      margin-bottom: 5px;
+      transition: background 0.3s ease;
+    }
+
+    .sidebar-header:hover {
+      background-color: #e2e2e2;
+    }
+
+    .sidebar-header.active {
+      background-color: #172a64;
+      color: #fff;
+    }
+
+    .sidebar-items {
+      list-style-type: none;
+      padding-left: 15px;
+      display: none;
+    }
+
+    .sidebar-items li {
+      font-size: 14px;
+      color: #333;
+      margin: 6px 0;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 40px;
     }
 
     .form-container {
-      border: 2px solid #172a64;
-      padding: 20px;
-      width: 400px;
+      max-width: 600px;
+      margin: auto;
       background: white;
+      padding: 20px;
+      border: 1px solid #ccc;
+      display: none;
     }
-
-    label {
-      display: block;
-      font-size: 14px;
-      font-weight: bold;
-      margin: 10px 0 5px;
-    }
-
-    .input-field {
-      width: 100%;
-      padding: 8px;
-      border: none;
-      border-bottom: 1px solid black;
-      outline: none;
-      font-size: 16px;
-    }
-
-    select.input-field {
-      border: 1px solid #172a64;
-      border-radius: 4px;
-      padding: 10px;
-    }
-
-    .button-group {
-      margin-top: 20px;
-      display: flex;
-      justify-content: space-between;
-      width: 400px;
-    }
-
-    .prev-btn, .next-btn {
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      cursor: pointer;
-    }
-
-    .prev-btn { background-color: #ddd; }
-    .next-btn { background-color: black; color: white; }
 
     .form-step {
       display: none;
@@ -88,209 +73,385 @@
       display: block;
     }
 
-    /* Step 3: Upload Box Styling */
-    .upload-box {
-      border: 2px dashed #ccc;
-      border-radius: 8px;
-      padding: 40px;
-      text-align: center;
-      position: relative;
-      cursor: pointer;
-      color: #555;
-      margin-top: 10px;
-      background-color: #f9f9f9;
-    }
-
-    .upload-box i {
-      font-size: 36px;
-      color: #888;
-    }
-
-    .upload-box p {
+    label {
+      display: block;
       margin-top: 10px;
     }
 
-    .upload-box input {
-      opacity: 0;
-      position: absolute;
-      top: 0; left: 0;
+    input, select, textarea {
       width: 100%;
-      height: 100%;
-      cursor: pointer;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      font-size: 14px;
     }
 
-    /* Signature Box Styling */
-    .signature-container {
-      border: 2px dashed #ccc;
-      padding: 20px;
-      text-align: center;
-      position: relative;
-      width: 100%;
-      height: 300px;
-    }
-
-    .signature-container p {
-      color: #172a64;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-
-    .signature-box {
-      border: 1px solid #172a64;
-      width: 100%;
-      height: 100%;
-      background-color: #f0f0f0;
-      position: relative;
-      text-align: center;
+    .button-group {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #999;
-      font-size: 14px;
-    }
-
-    /* Preview Box Styling */
-    .preview-box {
-      background-color: #f9f9f9;
-      border: 2px solid #172a64;
-      padding: 20px;
+      justify-content: space-between;
       margin-top: 20px;
-      text-align: left;
     }
 
-    .preview-box p {
+    .btn {
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #172a64;
+      color: white;
+      border: none;
       font-size: 14px;
-      margin-bottom: 10px;
     }
 
-    .preview-box .preview-header {
+    .btn:disabled {
+      background-color: #999;
+    }
+
+    .choice-buttons {
+      margin-top: 20px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .choice-buttons button {
+      flex: 1;
+      padding: 12px;
       font-weight: bold;
-      font-size: 16px;
-      margin-bottom: 10px;
+      background-color: #172a64;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
 
+    .choice-buttons button:hover {
+      background-color: #2c3e87;
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <img src="/static/images/DILG-Logo.png" alt="DILG Logo" class="logo">
-  <h1>CIVIL SERVICE CERTIFICATION</h1>
-  <p>Request Application</p>
-  <div class="menu-icon">
-    <i class="fas fa-bars"></i>
+<div class="info-sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-header active" onclick="selectForm('application', this)">Application Request</div>
   </div>
-</header>
+</div>
 
-<div class="container">
-  <nav class="sidebar">
-    <ul>
-      <li class="active">REQUEST LETTER</li>
-      <li>APPLICATION LETTER</li>
-      <li>VALID ID</li>
-      <li>SIGNATURE</li>
-      <li>CERTIFICATE</li>
-    </ul>
-  </nav>
+<div class="main-content">
+  <form id="form-container-application" class="form-container" style="display:block;">
+    <!-- Step 1 -->
+    <div class="form-step active">
+      <h3>Step 1: Basic Information</h3>
+      <label for="doc-code">Document Code</label>
+      <input type="text" id="doc-code" required>
 
-  <main>
-    <div class="form-container">
+      <label for="rev-no">Rev. No.</label>
+      <input type="text" id="rev-no" required>
 
-      <!-- Step 1 -->
-      <div class="form-step active">
-        <label>LAST NAME</label>
-        <input type="text" class="input-field" id="last-name">
-        <label>FIRST NAME</label>
-        <input type="text" class="input-field" id="first-name">
-        <label>MIDDLE INITIAL</label>
-        <input type="text" class="input-field" id="middle-initial">
+      <label for="eff-date">Eff. Date</label>
+      <input type="date" id="eff-date" required>
+
+      <label for="page">Page</label>
+      <input type="text" id="page" required>
+
+      <label for="ref-no">Reference No.</label>
+      <input type="text" id="ref-no" required>
+
+      <label for="date-request">Date of Request</label>
+      <input type="date" id="date-request" required>
+
+      <label for="client-name">Name of Client/ Organization</label>
+      <input type="text" id="client-name" required>
+
+      <label for="contact-details">Contact Details</label>
+      <input type="text" id="contact-details" required>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="form-step">
+      <h3>Step 2: Other Needed Information</h3>
+
+      <label for="last-name">Last Name</label>
+      <input type="text" id="last-name" required>
+
+      <label for="middle-name">Middle Name</label>
+      <input type="text" id="middle-name" required>
+
+      <label for="last-name-ext">Last Name, Ext.</label>
+      <input type="text" id="last-name-ext">
+
+      <label for="address">Address</label>
+      <input type="text" id="address" required>
+
+      <label for="position-held">Position</label>
+      <input type="text" id="position-held" required>
+
+      <label for="term-office">Term of Office</label>
+      <input type="text" id="term-office" required>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="form-step">
+      <h3>Step 3: Select Official Type</h3>
+      <div class="choice-buttons">
+        <button type="button" onclick="selectOfficialType('appointed')">Appointed</button>
+        <button type="button" onclick="selectOfficialType('elected')">Elected</button>
       </div>
+    </div>
 
-      <!-- Step 2 -->
-      <div class="form-step">
-        <label for="certifying-official">CERTIFICATION FROM THE FOLLOWING OFFICIAL</label>
-        <select id="certifying-official" class="input-field">
-          <option value="Punong Barangay">Punong Barangay</option>
-          <option value="DILG - Municipality">DILG - Municipality</option>
-          <option value="DILG - Provincial">DILG - Provincial</option>
-          <option value="DILG - Regional">DILG - Regional</option>
-        </select>
-      </div>
+    <!-- Step 4 - Appointed Official Form -->
+    <div class="form-step" id="appointed-step" style="display:none;">
+      <h3>Appointive Official</h3>
+      <p><em>- Brgy. Treasurer, Brgy. Secretary</em></p>
 
-      <!-- Step 3: Upload Back-to-Back ID -->
-      <div class="form-step">
-        <label style="font-size: 18px;">UPLOAD BACK TO BACK ID</label>
-        <div style="margin: 10px 0;">Front.jpeg</div>
-        <div class="upload-box">
-          <i class="fa-solid fa-image"></i>
-          <p>Upload Image here</p>
-          <input type="file" accept="image/*">
-        </div>
-      </div>
+      <label for="app-last-name">Last Name</label>
+      <input type="text" id="app-last-name" required>
 
-      <!-- Step 4: Signature -->
-      <div class="form-step">
-        <label for="signature">SIGNATURE</label>
-        <div class="signature-container">
-          <div class="signature-box">
-            <p>Signature Here</p>
-          </div>
-        </div>
-      </div>
+      <label for="app-first-name">First Name</label>
+      <input type="text" id="app-first-name" required>
 
-      <!-- Step 5: Preview -->
-      <div class="form-step">
-        <div class="preview-box">
-          <div class="preview-header">Review Your Information:</div>
-          <p><strong>Last Name:</strong> <span id="preview-last-name"></span></p>
-          <p><strong>First Name:</strong> <span id="preview-first-name"></span></p>
-          <p><strong>Middle Initial:</strong> <span id="preview-middle-initial"></span></p>
-          <p><strong>Certifying Official:</strong> <span id="preview-certifying-official"></span></p>
-          <p><strong>Uploaded ID:</strong> Front.jpeg</p>
-          <p><strong>Signature:</strong> Signature Here</p>
-        </div>
-      </div>
+      <label for="app-middle-name">Middle Name</label>
+      <input type="text" id="app-middle-name" required>
 
+      <label for="app-position">Position Held</label>
+      <input type="text" id="app-position" required>
+
+      <label for="app-date-appointment">Date Appointment (Start from most recent)</label>
+      <input type="date" id="app-date-appointment" required>
+
+      <label for="app-inclusive-from">Inclusive Dates of Years Served - From</label>
+      <input type="date" id="app-inclusive-from" required>
+
+      <label for="app-inclusive-to">Inclusive Dates of Years Served - To</label>
+      <input type="date" id="app-inclusive-to" required>
+
+      <label for="app-years-rendered">No. of Years Rendered</label>
+      <input type="number" id="app-years-rendered" min="0" required>
+
+      <label for="app-punong-name">Appointing Punong Barangay - Full Name</label>
+      <input type="text" id="app-punong-name" required>
+
+      <label for="app-punong-date-elected">Date Elected</label>
+      <input type="date" id="app-punong-date-elected" required>
+
+      <label for="app-punong-term-office">Term of Office (No. Of years)</label>
+      <input type="text" id="app-punong-term-office" required>
+
+      <label for="app-date-today">Date Today</label>
+      <input type="date" id="app-date-today" required>
+    </div>
+
+    <!-- Step 4 - Elected Official Form -->
+    <div class="form-step" id="elected-step" style="display:none;">
+      <h3>Elective Official</h3>
+      <p><em>- SK Chairperson/Chairman, Punong Brgy., Sanguniang Barangay Member (Brgy. Kagawad)</em></p>
+
+      <label for="ele-last-name">Last Name</label>
+      <input type="text" id="ele-last-name" required>
+
+      <label for="ele-first-name">First Name</label>
+      <input type="text" id="ele-first-name" required>
+
+      <label for="ele-middle-initial">Middle Initial</label>
+      <input type="text" id="ele-middle-initial" required>
+
+      <label for="ele-position-held">Position Held</label>
+      <input type="text" id="ele-position-held" required>
+
+      <label for="ele-date-election">Date of Election</label>
+      <input type="date" id="ele-date-election" required>
+
+      <label for="ele-term-office">Term of Office</label>
+      <input type="text" id="ele-term-office" required>
+
+      <label for="ele-inclusive-from">Inclusive Dates From</label>
+      <input type="date" id="ele-inclusive-from" required>
+
+      <label for="ele-inclusive-to">Inclusive Dates To</label>
+      <input type="date" id="ele-inclusive-to" required>
+
+      <label><input type="checkbox" id="ele-term-completed"> Term Completed?</label>
+
+      <label><input type="checkbox" id="ele-succeeded"> Succeeded to the Position?</label>
+    </div>
+
+    <!-- Step 5 - Review -->
+    <div class="form-step" id="review-step" style="display:none;">
+      <h3>Step 5: Review Your Information</h3>
+      <div id="review-content" style="background:#eee; padding: 15px; border-radius: 5px; max-height: 400px; overflow-y:auto;"></div>
     </div>
 
     <div class="button-group">
-      <button class="prev-btn" onclick="changeStep(-1)">← Previous</button>
-      <button class="next-btn" id="next-button" onclick="changeStep(1)">Next →</button>
+      <button type="button" id="prev-btn" class="btn" onclick="prevStep()" disabled>Previous</button>
+      <button type="button" id="next-btn" class="btn" onclick="nextStep()">Next</button>
+      <button type="submit" id="submit-btn" class="btn" style="display:none;">Submit</button>
     </div>
-  </main>
+  </form>
 </div>
 
 <script>
+  const form = document.getElementById('form-container-application');
+  const steps = Array.from(form.querySelectorAll('.form-step'));
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const submitBtn = document.getElementById('submit-btn');
+  const reviewContent = document.getElementById('review-content');
+
   let currentStep = 0;
-  const steps = document.querySelectorAll('.form-step');
-  const nextButton = document.getElementById('next-button');
+  let officialType = null;  // appointed or elected
 
-  function showStep(index) {
-    steps.forEach((step, i) => {
-      step.classList.toggle('active', i === index);
+  function showStep(step) {
+    steps.forEach((s, i) => {
+      s.classList.toggle('active', i === step);
+      // Handle appointed/elected step visibility for step 3
+      if (s.id === 'appointed-step' || s.id === 'elected-step') {
+        s.style.display = (i === step && officialType && s.id.startsWith(officialType)) ? 'block' : 'none';
+      }
+      if (s.id === 'review-step') {
+        s.style.display = (i === step) ? 'block' : 'none';
+      }
     });
+
+    prevBtn.disabled = step === 0;
+    nextBtn.style.display = step === steps.length - 2 ? 'inline-block' : 'inline-block';
+    submitBtn.style.display = step === steps.length - 1 ? 'inline-block' : 'none';
+
+    if (step === steps.length - 1) {
+      displayReview();
+    }
   }
 
-  function changeStep(direction) {
-    currentStep += direction;
-    if (currentStep < 0) currentStep = 0;
-    if (currentStep >= steps.length) currentStep = steps.length - 1;
+  function validateStep(step) {
+    const activeStep = steps[step];
+    const inputs = Array.from(activeStep.querySelectorAll('input, select, textarea')).filter(input => !input.disabled && input.required);
+    for (const input of inputs) {
+      if (input.type === 'checkbox') {
+        // skip required for checkbox (none are marked required here)
+        continue;
+      }
+      if (!input.value) {
+        alert(`Please fill out the field: "${input.previousElementSibling ? input.previousElementSibling.innerText : input.id}"`);
+        input.focus();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function nextStep() {
+    // Special case: If current step is 3 (index 3) and officialType not selected yet, block proceeding
+    if (currentStep === 2 && !officialType) {
+      alert('Please select an official type: Appointed or Elected.');
+      return;
+    }
+
+    if (!validateStep(currentStep)) return;
+
+    // If on step 3 (the officialType step), when next pressed:
+    if (currentStep === 2) {
+      // Show the appointed or elected form on step 4 accordingly
+      if (officialType === 'appointed') {
+        steps[3].id = 'appointed-step';
+      } else if (officialType === 'elected') {
+        steps[3].id = 'elected-step';
+      }
+    }
+
+    if (currentStep < steps.length - 1) {
+      currentStep++;
+      showStep(currentStep);
+    }
+  }
+
+  function prevStep() {
+    if (currentStep > 0) {
+      currentStep--;
+      showStep(currentStep);
+    }
+  }
+
+  function selectOfficialType(type) {
+    officialType = type;
+    // Show appointed or elected step
+    if (type === 'appointed') {
+      document.getElementById('appointed-step').style.display = 'block';
+      document.getElementById('elected-step').style.display = 'none';
+    } else {
+      document.getElementById('appointed-step').style.display = 'none';
+      document.getElementById('elected-step').style.display = 'block';
+    }
+  }
+
+  function displayReview() {
+    // Gather all form values and display in reviewContent
+    let html = '<h4>Basic Information</h4><ul>';
+    html += `<li>Document Code: ${document.getElementById('doc-code').value}</li>`;
+    html += `<li>Rev. No.: ${document.getElementById('rev-no').value}</li>`;
+    html += `<li>Eff. Date: ${document.getElementById('eff-date').value}</li>`;
+    html += `<li>Page: ${document.getElementById('page').value}</li>`;
+    html += `<li>Reference No.: ${document.getElementById('ref-no').value}</li>`;
+    html += `<li>Date of Request: ${document.getElementById('date-request').value}</li>`;
+    html += `<li>Name of Client/Organization: ${document.getElementById('client-name').value}</li>`;
+    html += `<li>Contact Details: ${document.getElementById('contact-details').value}</li>`;
+    html += '</ul>';
+
+    html += '<h4>Additional Information</h4><ul>';
+    html += `<li>Last Name: ${document.getElementById('last-name').value}</li>`;
+    html += `<li>Middle Name: ${document.getElementById('middle-name').value}</li>`;
+    html += `<li>Last Name, Ext.: ${document.getElementById('last-name-ext').value}</li>`;
+    html += `<li>Address: ${document.getElementById('address').value}</li>`;
+    html += `<li>Position: ${document.getElementById('position-held').value}</li>`;
+    html += `<li>Term of Office: ${document.getElementById('term-office').value}</li>`;
+    html += '</ul>';
+
+    html += `<h4>Official Type Selected: ${officialType.charAt(0).toUpperCase() + officialType.slice(1)}</h4>`;
+
+    if (officialType === 'appointed') {
+      html += '<h4>Appointed Official Information</h4><ul>';
+      html += `<li>Last Name: ${document.getElementById('app-last-name').value}</li>`;
+      html += `<li>First Name: ${document.getElementById('app-first-name').value}</li>`;
+      html += `<li>Middle Name: ${document.getElementById('app-middle-name').value}</li>`;
+      html += `<li>Position Held: ${document.getElementById('app-position').value}</li>`;
+      html += `<li>Date Appointment: ${document.getElementById('app-date-appointment').value}</li>`;
+      html += `<li>Inclusive Dates From: ${document.getElementById('app-inclusive-from').value}</li>`;
+      html += `<li>Inclusive Dates To: ${document.getElementById('app-inclusive-to').value}</li>`;
+      html += `<li>No. of Years Rendered: ${document.getElementById('app-years-rendered').value}</li>`;
+      html += `<li>Appointing Punong Barangay: ${document.getElementById('app-punong-name').value}</li>`;
+      html += `<li>Date Elected (Punong Barangay): ${document.getElementById('app-punong-date-elected').value}</li>`;
+      html += `<li>Term of Office (Punong Barangay): ${document.getElementById('app-punong-term-office').value}</li>`;
+      html += `<li>Date Today: ${document.getElementById('app-date-today').value}</li>`;
+      html += '</ul>';
+    } else if (officialType === 'elected') {
+      html += '<h4>Elected Official Information</h4><ul>';
+      html += `<li>Last Name: ${document.getElementById('ele-last-name').value}</li>`;
+      html += `<li>First Name: ${document.getElementById('ele-first-name').value}</li>`;
+      html += `<li>Middle Initial: ${document.getElementById('ele-middle-initial').value}</li>`;
+      html += `<li>Position Held: ${document.getElementById('ele-position-held').value}</li>`;
+      html += `<li>Date of Election: ${document.getElementById('ele-date-election').value}</li>`;
+      html += `<li>Term of Office: ${document.getElementById('ele-term-office').value}</li>`;
+      html += `<li>Inclusive Dates From: ${document.getElementById('ele-inclusive-from').value}</li>`;
+      html += `<li>Inclusive Dates To: ${document.getElementById('ele-inclusive-to').value}</li>`;
+      html += `<li>Term Completed: ${document.getElementById('ele-term-completed').checked ? 'Yes' : 'No'}</li>`;
+      html += `<li>Succeeded to the Position: ${document.getElementById('ele-succeeded').checked ? 'Yes' : 'No'}</li>`;
+      html += '</ul>';
+    }
+
+    reviewContent.innerHTML = html;
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('Form submitted successfully!');
+    // You can do actual form submission here (send data to server)
+    form.reset();
+    currentStep = 0;
+    officialType = null;
     showStep(currentStep);
+    // Reset appointed/elected visibility
+    document.getElementById('appointed-step').style.display = 'none';
+    document.getElementById('elected-step').style.display = 'none';
+  });
 
-    // Update Preview (Step 5)
-    if (currentStep === 4) {
-      document.getElementById('preview-last-name').textContent = document.getElementById('last-name').value;
-      document.getElementById('preview-first-name').textContent = document.getElementById('first-name').value;
-      document.getElementById('preview-middle-initial').textContent = document.getElementById('middle-initial').value;
-      document.getElementById('preview-certifying-official').textContent = document.getElementById('certifying-official').value;
-      nextButton.textContent = "Finished"; // Change to "Finished" when on the preview step
-    }
-    
-    // When the user clicks Finished
-    if (currentStep === steps.length - 1 && nextButton.textContent === "Finished") {
-      alert("Form submitted!"); // You can replace this with your actual submit logic
-    }
-  }
+  // Initialize display
+  showStep(currentStep);
 </script>
 
 </body>

@@ -25,10 +25,6 @@
       padding: 10px 20px;
       border-bottom: 2px solid #ccc;
     }
-    header img.logo {
-      height: 50px;
-      margin-right: 10px;
-    }
     .dilg-logo,
     .Smartfilex_logo {
       height: 60px;  
@@ -100,6 +96,10 @@
         display: flex;
         align-items: center;
         font-size: 15px;
+    }
+    .task-list .select-all {
+        margin-bottom: 10px;
+        font-weight: bold;
     }
     .status-row {
         display: flex;
@@ -232,29 +232,35 @@
               
         
             <div class="task-list mt-3">
-                <div><input type="checkbox" checked> Barangay Road Clean up Operation (BARCO)</div>
-                <div><input type="checkbox" checked> Barangay Road Clean up Operation (BARCO)</div>
-                <div><input type="checkbox" checked> Barangay Road Clean up Operation (BARCO)</div>
-                <div><input type="checkbox" checked> Barangay Road Clean up Operation (BARCO)</div>
+                <!-- Select All Checkbox -->
+                <div class="select-all">
+                    <input type="checkbox" id="select-all" onclick="toggleAllTasks()"> Select All Tasks
+                </div>
+                <div><input type="checkbox" class="task"> Barangay Road Clean up Operation (BARCO)</div>
+                <div><input type="checkbox" class="task"> Barangay Road Clean up Operation (BARCO)</div>
+                <div><input type="checkbox" class="task"> Barangay Road Clean up Operation (BARCO)</div>
+                <div><input type="checkbox" class="task"> Barangay Road Clean up Operation (BARCO)</div>
               
                 <div class="dropdown-select mt-3">
                   <label for="status-select">Status</label>
                   <select id="status" onchange="updateBackgroundColor(this)" style="width: 100%; padding: 0.5em;">
-                    <option value="accomplished">Accomplished</option>
-                    <option value="pending">Pending</option>
-                    <option value="not-accomplished">Not Accomplished</option>
+                    <option value="accomplished" style="background-color: #2ecc71;">Accomplished</option>
+                    <option value="pending" style="background-color: #2F3A7E;">Pending</option>
+                    <option value="not-accomplished" style="background-color: #E92323;">Not Accomplished</option>
                   </select>                
                 </div>
               
+
                 <div class="status-row mt-3">
                   <div class="left-status">
                     <span>Status: Accomplished <i class="edit-icon">✎</i></span><br>
-                    <span>Due Date: May 20, 2025 <i class="edit-icon">✎</i></span>
+                    <span>Due Date: <input type="date" value="2025-05-20"> <i class="edit-icon">✎</i></span>
                   </div>
                   <div class="right-status">
                     <span>Last Updated: May 5, 2025 <i class="edit-icon">✎</i></span>
                   </div>
                 </div>
+                <div id="status-update-message" style="display:none; color: green;">Status updated successfully!</div>
               </div>          
           </div>
     </div>
@@ -263,20 +269,31 @@
 
 <script>
     function updateBackgroundColor(selectElement) {
-        const container = document.getElementById("status-container");
+        const taskPanel = selectElement.closest('.task-panel');
         const value = selectElement.value.toLowerCase();
     
         if (value === "not-accomplished") {
-            container.style.backgroundColor = "#E92323"; 
+            taskPanel.style.backgroundColor = "#E92323"; 
         } else if (value === "pending") {
-            container.style.backgroundColor = "#2F3A7E"; 
+            taskPanel.style.backgroundColor = "#2F3A7E"; 
         } else if (value === "accomplished") {
-            container.style.backgroundColor = "#2ecc71"; 
+            taskPanel.style.backgroundColor = "#2ecc71"; 
         }
+
+        // Show success message when the status is updated
+        document.getElementById('status-update-message').style.display = 'block';
+        setTimeout(function(){
+            document.getElementById('status-update-message').style.display = 'none';
+        }, 2000);
     }
-    </script>
-    
-    
-  
+
+    // Toggle select all tasks
+    function toggleAllTasks() {
+        const isChecked = document.getElementById("select-all").checked;
+        const tasks = document.querySelectorAll(".task");
+        tasks.forEach(task => task.checked = isChecked);
+    }
+</script>
+
 </body>
 </html>

@@ -132,3 +132,7 @@ import os
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Redirects after login/logout
+LOGIN_REDIRECT_URL = '/landing_page/'  # Change this to your actual dashboard URL
+LOGOUT_REDIRECT_URL = '/login/'     # Redirects back to login page after logout

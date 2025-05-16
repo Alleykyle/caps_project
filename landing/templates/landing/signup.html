@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Sign Up</title>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Font Awesome CDN -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-Zj5vqG4YPJr+1uvFJZB9T7Z3PbK3K+2UV3Yw/2Zg+Cv/8nU9E2i+TUNtrKwh9S+0Ml1y6+v+4PuhF30WnHg=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    />
     <style>
         body {
             display: flex;
@@ -22,6 +29,7 @@
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
         }
 
         .logo {
@@ -73,7 +81,6 @@
             opacity: 0.8;
         }
 
-        /* Back Button */
         .back-button {
             position: absolute;
             top: 20px;
@@ -95,18 +102,34 @@
 </head>
 <body>
 
-    <!-- Back Button -->
     <button class="back-button" onclick="history.back()">Back</button>
-
+    {% load static %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Sign Up</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+        <style>
+            /* Same styles as before... */
+        </style>
+    </head>
+    <body>
+    
+    <button class="back-button" onclick="history.back()">Back</button>
+    
     <div class="container">
-        <img src="/static/images/DILG-logo.png" alt="DILG Logo" class="logo">
+        <img src="{% static 'images/DILG-logo.png' %}" alt="DILG Logo" class="logo">
         <h2>SIGN UP</h2>
+    
+        <form method="POST">
+            {% csrf_token %}
             <div class="input-group">
-                <i class="fas fa-envelope"></i>
+                <i class="fas fa-user"></i>
                 <input type="text" name="username" placeholder="USERNAME" required>
             </div>
             <div class="input-group">
-                <i class="fas fa-user"></i>
+                <i class="fas fa-envelope"></i>
                 <input type="email" name="email" placeholder="EMAIL" required>
             </div>
             <div class="input-group">
@@ -119,9 +142,8 @@
             </div>
             <button type="submit" class="btn">Create Account</button>
         </form>
-        
     </div>
-
+    
 
 </body>
 </html>

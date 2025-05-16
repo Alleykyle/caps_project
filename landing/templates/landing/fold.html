@@ -225,27 +225,7 @@
   
     <ul>
       <li>
-        <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-          Dashboard
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'application_request' %}" class="{% if request.resolver_match.url_name == 'application_request' %}active{% endif %}">
-          Application Request
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'history' %}" class="{% if request.resolver_match.url_name == 'history' %}active{% endif %}">
-          History
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'employees_profile' %}" class="{% if request.resolver_match.url_name == 'employees_profile' %}active{% endif %}">
-          Employees Profile
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'fold' %}" class="{% if request.resolver_match.url_name == 'folds' %}active{% endif %}">
+        <a href="{% url 'landing:fold' %}" class="{% if request.resolver_match.url_name == 'folds' %}active{% endif %}">
           Folders
         </a>
       </li>
@@ -283,7 +263,7 @@
     <!-- Folder grid -->
     <div class="folders-grid">
       {% for folder in folders %}
-        <a href="{% url 'folder_detail' folder.name %}">
+        <a href="{% url 'landing:folder_detail' folder.name %}">
           <div class="folder">
             <i class="fa fa-folder"></i> {{ folder.name }}
           </div>
@@ -307,7 +287,7 @@
             </div>
 
             <!-- Delete form (right) -->
-            <form id="delete-form-{{ file.id }}" method="post" action="{% url 'delete_file' file.id %}">
+            <form id="delete-form-{{ file.id }}" method="post" action="{% url 'landing:delete_file' file.id %}">
               {% csrf_token %}
               <button type="button"
                 onclick="confirmDelete('{{ file.id }}')"

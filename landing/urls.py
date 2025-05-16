@@ -1,36 +1,36 @@
 from django.urls import path
-from .views import home, signin
-from . import views
 from django.contrib.auth import views as auth_views
-from .views import monitoring_calendar
-from .views import csc_page
-from .views import dashboard
-from .views import application_request
-from .views import employees_profile
-from .views import history
-from .views import fold
-from .views import settings
-from django.urls import path
 from . import views
-
 
 app_name = 'landing'
 
 urlpatterns = [
-    path('', home, name='home'),
-    path('signin/', signin, name='signin'), 
-    path("signup/", views.signup_view, name="signup"),
-    path('login/', views.login_view, name='login'),
-    path('monitoring_calendar/',monitoring_calendar, name='monitoring_calendar'),
-    path('csc_page/',csc_page, name='csc_page'),
-    path('dashboard/', dashboard, name = 'dashboard'),
-    path('application_request/', application_request, name = 'application_request'),
-    path('history/', history, name = 'history'),
-    path('employees_profile/', employees_profile, name = 'employees_profile'),
+    path('', views.home, name='home'),
+
+    path('signup/', views.signup, name='signup'),
+
+    # Use Django's built-in login view with your custom template
+    path('login/', auth_views.LoginView.as_view(template_name='landing/login.html'), name='login'),
+
+    path('landing_page/', views.landing_page, name='landing_page'),
+
+    path('monitoring_calendar/', views.monitoring_calendar, name='monitoring_calendar'),
+
+    path('csc_page/', views.csc_page, name='csc_page'),
+
+    path('dashboard/', views.dashboard, name='dashboard'),
+
+    path('application_request/', views.application_request, name='application_request'),
+
+    path('history/', views.history, name='history'),
+
+    path('employees_profile/', views.employees_profile, name='employees_profile'),
+
     path('folders/', views.fold, name='fold'),
+
+    path('folders/<str:folder_name>/', views.folder_detail, name='folder_detail'),
+
     path('delete/<int:file_id>/', views.delete_file, name='delete_file'),
-    path('settings/', settings, name = 'settings'),
-    
 
-
+    path('settings/', views.settings, name='settings'),
 ]

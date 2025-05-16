@@ -11,6 +11,8 @@ from django.contrib import messages
 from landing.models import File,Folder
 from collections import defaultdict 
 from django.contrib import messages
+from django.contrib.auth import authenticate, login  # <-- import login here
+
 
 
 def home(request):
@@ -20,11 +22,30 @@ def signin(request):
     return render(request, 'landing/signin.html')
 
 def signup(request):
-    return render(request, 'landing/signup.html')
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('landing:login')  # make sure your login URL is named 'login'
+    else:
+        form = UserCreationForm()
+    return render(request, 'landing/signup.html', {'form': form})
 
 
-def login(request):
-    return render(request, "landing/login.html")
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('landing_page')  # ✅ This must match the URL name
+        else:
+            # Show error if login fails
+            return render(request, 'landing/login.html', {'error': 'Invalid username or password'})
+
+    return render(request, 'landing/login.html')
 
 def landing_page(request):
     return render(request, "landing/landing_page.html")

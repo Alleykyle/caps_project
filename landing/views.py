@@ -11,7 +11,10 @@ from django.contrib import messages
 from landing.models import File,Folder
 from collections import defaultdict 
 from django.contrib import messages
-from django.contrib.auth import authenticate, login  # <-- import login here
+from django.contrib.auth import authenticate, login  
+from django.shortcuts import render, get_object_or_404
+import logging
+logger = logging.getLogger(__name__)
 
 
 
@@ -50,8 +53,12 @@ def login_view(request):
 def landing_page(request):
     return render(request, "landing/landing_page.html")
 
+def landing_page(request):
+    return render(request, 'landing_page.html')
+
 def monitoring_calendar(request):
     return render(request, "landing/monitoring_calendar.html")
+
 
 def csc_page(request):
     return render(request, "landing/csc_page.html")
@@ -135,6 +142,7 @@ def upload_file(request):
     if request.method == 'POST' and request.FILES.get('file'):
         uploaded_file = request.FILES['file']
         file_name = uploaded_file.name.lower()
+        logger.info(f"Uploading file: {uploaded_file.name}")
         name_lower = file_name.lower()
 
         ext = file_name.split('.')[-1]
@@ -165,3 +173,28 @@ def upload_file(request):
 
 def settings(request):
     return render(request, "landing/settings.html")
+
+
+#Barangay Monitoring
+def barangay_detail(request, barangay_id):
+    tasks = [
+        "Barangay Road Clean up Operation (BARCO)",
+        "Barangay Assembly",
+        "Community Health Check",
+        "Waste Management Campaign",
+    ]
+
+    context = {
+        'barangay_id': barangay_id,
+        'tasks': tasks,
+        'active_barangay': barangay_id,
+        'barangay_range': range(1, 34),  # Pass the range for sidebar
+        'current_status': 'accomplished', 
+    }
+    return render(request, 'monitoring/barangay_detail.html', context)
+
+
+
+
+
+

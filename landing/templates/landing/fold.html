@@ -222,14 +222,40 @@
 
   <div class="sidebar">
     <img src="{% static 'images/DILG-Logo.png' %}" alt="DILG Logo" class="sidebar-logo" />
-  
+
     <ul>
-      <li>
-        <a href="{% url 'landing:fold' %}" class="{% if request.resolver_match.url_name == 'folds' %}active{% endif %}">
-          Folders
+    <li>
+        <a href="{% url 'landing:dashboard' %}" 
+           class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            Dashboard
         </a>
-      </li>
-    </ul>
+    </li>
+    <li>
+        <a href="{% url 'landing:application_request' %}" 
+           class="{% if request.resolver_match.url_name == 'application_request' %}active{% endif %}">
+            Application Request
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'landing:history' %}" 
+           class="{% if request.resolver_match.url_name == 'history' %}active{% endif %}">
+            History
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'landing:employees_profile' %}" 
+           class="{% if request.resolver_match.url_name == 'employees_profile' %}active{% endif %}">
+            Employees Profile
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'landing:fold' %}" 
+           class="{% if request.resolver_match.url_name == 'fold' %}active{% endif %}">
+            Folders
+        </a>
+    </li>
+    {# <li><a href="{% url 'settings' %}">Settings</a></li> #}
+</ul>
   </div>
 
   <div class="main-content">

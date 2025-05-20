@@ -10,5 +10,7 @@ urlpatterns = [
     # All landing app urls including login inside here:
     path('', include('landing.urls', namespace='landing')),
 
+  
+
     # other urls like signup can also be inside landing.urls
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

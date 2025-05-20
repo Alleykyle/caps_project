@@ -46,5 +46,14 @@
         <a href={% url 'landing:csc_page' %}>Eligibility Certification</a>
         <a href={% url 'landing:dashboard' %}>Dashboard</a>
     </div>
+    <div id="loader-wrapper">
+        <div class="loader"></div>
+    </div>
+
+    <script>
+        window.addEventListener("load", function () {
+            document.getElementById("loader-wrapper").style.display = "none";
+        });
+    </script>
 </body>
 </html>

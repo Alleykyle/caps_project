@@ -6,6 +6,7 @@ app_name = 'landing'
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('', views.landing_page, name='landing_page'),
 
     path('signup/', views.signup, name='signup'),
 
@@ -15,7 +16,6 @@ urlpatterns = [
     path('landing_page/', views.landing_page, name='landing_page'),
 
     path('monitoring_calendar/', views.monitoring_calendar, name='monitoring_calendar'),
-
     path('csc_page/', views.csc_page, name='csc_page'),
 
     path('dashboard/', views.dashboard, name='dashboard'),
@@ -33,4 +33,9 @@ urlpatterns = [
     path('delete/<int:file_id>/', views.delete_file, name='delete_file'),
 
     path('settings/', views.settings, name='settings'),
+
+
+    
+    #monitoring_barangay
+    path('monitoring/barangay/<int:barangay_id>/', views.barangay_detail, name='barangay_detail'),
 ]

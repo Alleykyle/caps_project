@@ -1,7 +1,9 @@
 import os
 from django.db import models
 from django.utils.deconstruct import deconstructible
+from django.contrib.auth.models import User
 
+#file categorization
 @deconstructible
 class DynamicUploadPath:
     def __call__(self, instance, filename):
@@ -36,3 +38,18 @@ class Folder(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class Barangay(models.Model):
+    name = models.CharField(max_length=100)
+    status = models.CharField(max_length=50, default='Pending')
+    due_date = models.DateField(null=True, blank=True)
+    date_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
+#Barangay Monitoring_Calendar
+
+

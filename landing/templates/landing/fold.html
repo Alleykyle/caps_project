@@ -57,33 +57,51 @@
       font-weight: 500;
     }
 
- 
-
     .active {
-      background-color: #dcc990;
-      border-left: 4px solid red;
+      background-color: #f2e9c9;
+      border-left: 5px solid #003366;
     }
 
     .main-content {
       flex: 1;
       background-color: #f4f4f4;
-      padding: 20px 30px;
+      padding: 15px 25px;
       overflow-y: auto;
       background: url('/static/images/background.jpg') no-repeat center center fixed;
       background-size: cover;
       position: relative;
     }
-    .main-content::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  
-  z-index: 0;
-}
-.main-content > * {
-  position: relative;
-  z-index: 1;
-}
+    
+     .header {
+      background: linear-gradient(135deg, #0e2a52 0%, #1e3a72 100%);
+      color: white;
+      padding: 25px 30px;
+      font-size: 28px;
+      font-weight: bold;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-actions {
+      display: flex;
+      gap: 15px;
+    }
+
+    .notification-icon, .menu-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 20%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .notification-icon:hover, .menu-icon:hover {
+      background-color: rgba(255,255,255,0.3);
+    }
     
 
     .top-bar {
@@ -223,7 +241,7 @@
   <div class="sidebar">
     <img src="{% static 'images/DILG-Logo.png' %}" alt="DILG Logo" class="sidebar-logo" />
 
-    <ul>
+   <ul>
     <li>
         <a href="{% url 'landing:dashboard' %}" 
            class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
@@ -259,10 +277,19 @@
   </div>
 
   <div class="main-content">
-    <div style="display: flex; justify-content: flex-end; align-items: center; gap: 15px; margin: 10px 20px;">
-      <img src="{% static 'images/notif.png' %}" alt="Notifications" style="width: 24px; height: 24px; cursor: pointer;"/>
-      <img src="{% static 'images/menu.png' %}" alt="Menu" style="width: 24px; height: 24px; cursor: pointer;"/>
-    
+    <div class="main-content">
+    <div class="header">
+      <span>History</span>
+      <div class="header-actions">
+        <div class="notification-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="white" viewBox="0 0 24 24">
+          <path d="M12 24c1.104 0 2-.897 2-2h-4c0 1.103.896 2 2 2zm6.707-5.293L18 18V11c0-3.309-2.691-6-6-6S6 7.691 6 11v7l-.707.707C4.521 19.479 5.262 21 6.828 21h10.344c1.566 0 2.307-1.521 1.535-2.293z"/>
+        </svg>
+        </div>
+          <div class="menu-icon">
+          <a href="{% url 'landing:landing_page' %}">☰</a>   
+        </div> 
+      </div>
     </div>
     <div class="top-bar">
       <div class="top-left-buttons">
@@ -271,7 +298,7 @@
       </div>
       
       <!-- Hidden Upload Form -->
-      <form id="uploadForm" method="post" enctype="multipart/form-data" style="display: none;">
+      <form id="uploadForm" method="post"  enctype="multipart/form-data" style="display: none;">
         {% csrf_token %}
         <input type="file" id="fileInput" name="file" onchange="document.getElementById('uploadForm').submit();" />
       </form>
@@ -285,6 +312,8 @@
 
       <input class="search-box" type="text" placeholder="Search...">
     </div>
+    
+   
 
     <!-- Folder grid -->
     <div class="folders-grid">

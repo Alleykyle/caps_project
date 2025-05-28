@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Folder</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .success { color: green; }
+        .error { color: red; }
+        label, select, button { display: block; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Delete Folder</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p class="{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="folderSelect">Choose a folder:</label>
+        <select name="folder_name" id="folderSelect">
+            <option value="">-- Select Folder --</option>
+            {% for folder in folders %}
+                <option value="{{ folder }}">{{ folder }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Delete Selected Folder</button>
+    </form>
+</body>
+</html>

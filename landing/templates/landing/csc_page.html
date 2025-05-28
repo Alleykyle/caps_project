@@ -1,458 +1,569 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Step-by-Step Application Form</title>
-  <style>
-    /* your existing styles unchanged */
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSC-ERPO BOE Certification</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      display: flex;
-      min-height: 100vh;
-      background-color: #f9f9f9;
-    }
+        body {
+            font-family: 'Times New Roman', serif;
+            background: #003366;
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
 
-    .info-sidebar {
-      width: 250px;
-      padding: 20px;
-      background-color: #f4f4f4;
-      border-right: 2px solid #ddd;
-    }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
 
-    .sidebar-header {
-      font-size: 18px;
-      color: #172a64;
-      cursor: pointer;
-      padding: 8px;
-      margin-bottom: 5px;
-      transition: background 0.3s ease;
-    }
+        .header {
+            background: white;
+            color: #333;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 2px solid #333;
+        }
 
-    .sidebar-header:hover {
-      background-color: #e2e2e2;
-    }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
 
-    .sidebar-header.active {
-      background-color: #172a64;
-      color: #fff;
-    }
+        .header-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
 
-    .sidebar-items {
-      list-style-type: none;
-      padding-left: 15px;
-      display: none;
-    }
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #003366;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-    .sidebar-items li {
-      font-size: 14px;
-      color: #333;
-      margin: 6px 0;
-    }
+        .header h2 {
+            font-size: 1.1em;
+            font-weight: normal;
+            color: #666;
+            font-style: italic;
+        }
 
-    .main-content {
-      flex: 1;
-      padding: 40px;
-    }
+        .form-container {
+            padding: 40px;
+        }
 
-    .form-container {
-      max-width: 600px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border: 1px solid #ccc;
-      display: none;
-    }
+        .form-section {
+            margin-bottom: 30px;
+        }
 
-    .form-step {
-      display: none;
-    }
+        .form-section h3 {
+            color: #003366;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-    .form-step.active {
-      display: block;
-    }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
 
-    label {
-      display: block;
-      margin-top: 10px;
-    }
+        .form-group {
+            position: relative;
+        }
 
-    input, select, textarea {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
 
-    .button-group {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-    }
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #666;
+            border-radius: 3px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            background: white;
+            font-family: 'Times New Roman', serif;
+        }
 
-    .btn {
-      padding: 10px 20px;
-      cursor: pointer;
-      background-color: #172a64;
-      color: white;
-      border: none;
-      font-size: 14px;
-    }
+        .form-control:focus {
+            outline: none;
+            border-color: #d8b400;
+            box-shadow: 0 0 0 2px rgba(26, 71, 42, 0.1);
+        }
 
-    .btn:disabled {
-      background-color: #999;
-    }
+        .table-container {
+            background: white;
+            border: 1px solid #333;
+            padding: 0;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
 
-    .choice-buttons {
-      margin-top: 20px;
-      display: flex;
-      gap: 20px;
-    }
+        .certification-table {
+            width: 100%;
+            min-width: 1200px;
+            border-collapse: collapse;
+            background: white;
+        }
 
-    .choice-buttons button {
-      flex: 1;
-      padding: 12px;
-      font-weight: bold;
-      background-color: #172a64;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
+        .certification-table th {
+            background: #f8f8f8;
+            color: #333;
+            padding: 12px 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.85em;
+            line-height: 1.3;
+            white-space: nowrap;
+            min-width: 120px;
+            border: 1px solid #666;
+        }
 
-    .choice-buttons button:hover {
-      background-color: #2c3e87;
-    }
-  </style>
+        .certification-table th:first-child {
+            min-width: 140px;
+        }
+
+        .certification-table th:nth-child(2) {
+            min-width: 150px;
+        }
+
+        .certification-table th:nth-child(5) {
+            min-width: 100px;
+        }
+
+        .certification-table th:nth-child(6) {
+            min-width: 130px;
+        }
+
+        .certification-table td {
+            padding: 10px 8px;
+            text-align: center;
+            border: 1px solid #666;
+            vertical-align: middle;
+        }
+
+        .certification-table input {
+            width: 100%;
+            min-width: 100px;
+            padding: 8px 6px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            text-align: center;
+            background: white;
+            font-size: 0.9em;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .certification-table input:focus {
+            outline: none;
+            border-color: #d8b400;
+        }
+
+        .certification-table input[readonly] {
+            background-color: #f8f8f8;
+            color: #666;
+        }
+
+        /* Specific column widths for better readability */
+        .certification-table td:first-child input {
+            min-width: 120px;
+        }
+
+        .certification-table td:nth-child(2) input {
+            min-width: 130px;
+        }
+
+        .certification-table td:nth-child(3) input,
+        .certification-table td:nth-child(4) input {
+            min-width: 120px;
+        }
+
+        .certification-table td:nth-child(5) input {
+            min-width: 80px;
+        }
+
+        .certification-table td:nth-child(6) input {
+            min-width: 110px;
+        }
+
+        .certification-table td:nth-child(7) input {
+            min-width: 120px;
+        }
+
+        .certification-table td:nth-child(8) input {
+            min-width: 90px;
+        }
+
+        .certification-text {
+            background: white;
+            padding: 20px;
+            margin: 25px 0;
+            border: 1px solid #ccc;
+            border-left: 4px solid #d8b400;
+        }
+
+        .certification-text p {
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: justify;
+            font-size: 1em;
+        }
+
+        .signature-info {
+            margin-top: 15px;
+        }
+
+        .signature-area {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+        }
+
+        .director-signature {
+            text-align: center;
+        }
+
+        .director-signature .director-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #333;
+            text-transform: uppercase;
+            border-bottom: 1px solid #333;
+            padding-bottom: 2px;
+            margin-bottom: 5px;
+        }
+
+        .director-signature .director-title {
+            font-weight: normal;
+            color: #666;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border: 1px solid #333;
+            border-radius: 3px;
+            font-size: 0.95em;
+            font-weight: normal;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #333;
+        }
+
+        .btn-primary {
+            background: #003366;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .btn-secondary:hover {
+            background: #f5f5f5;
+        }
+
+        .btn-primary:hover {
+            background: #d8b400;
+        }
+
+        .date-issued {
+            text-align: right;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .signature-section {
+                justify-content: center;
+            }
+            
+            .btn-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <img src="{% static 'images/DILG-Logo.png' %}" alt="DILG Logo" class="header-logo" />
+            </div>
+            <h1>Eligibility Certification</h1>
+            <h2>CSC-ERPO BOE Form 1(b), April 2012</h2>
+        </div>
 
-<div class="info-sidebar">
-  <div class="sidebar-section">
-    <div class="sidebar-header active" onclick="selectForm('application', this)">Application Request</div>
-  </div>
-</div>
+        <div class="form-container">
+            <div class="date-issued">
+                <strong>Date Issued:</strong> <input type="date" class="form-control" style="width: auto; display: inline-block;" value="2025-04-29">
+            </div>
 
-<div class="main-content">
-  <form id="form-container-application" class="form-container" style="display:block;">
-    <!-- Step 1 -->
-    <div class="form-step active">
-      <h3>Step 1: Basic Information</h3>
-      <label for="doc-code">Document Code</label>
-      <input type="text" id="doc-code" required>
+            <form method="post" id="certificationForm">
+                <div class="form-section">
+                    <h3>Certification on Services Rendered in the Barangay (Appointive Officials)</h3>
+                    
+                    <div class="certification-text">
+                        <p>This is to certify that <strong>
+                            <select class="form-control" style="display: inline-block; width: 80px; margin: 0 5px;">
+                                <option value="Ms.">Ms.</option>
+                                <option value="Mr.">Mr.</option>
+                            </select>
+                            <input type="text" class="form-control" style="display: inline-block; width: 200px; margin: 0 5px;" placeholder="Full Name" value="Maria Mercedez"></strong> has rendered services in Barangay <strong><input type="text" class="form-control" style="display: inline-block; width: 150px; margin: 0 5px;" placeholder="Barangay Name" value="Ransoban"></strong>, <strong><input type="text" class="form-control" style="display: inline-block; width: 150px; margin: 0 5px;" placeholder="City/Municipality" value="Lucena City"></strong>, Province of <strong><input type="text" class="form-control" style="display: inline-block; width: 120px; margin: 0 5px;" placeholder="Province" value="Quezon"></strong>, with the following details:</p>
+                    </div>
+                </div>
 
-      <label for="rev-no">Rev. No.</label>
-      <input type="text" id="rev-no" required>
+                <div class="table-container">
+                    <table class="certification-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Position Held</th>
+                                <th rowspan="2">Date of Appointment (start from most recent)</th>
+                                <th colspan="2">Inclusive Dates of Years Served</th>
+                                <th rowspan="2">No. of Years Served</th>
+                                <th colspan="3">Appointing/Punong Barangay</th>
+                            </tr>
+                            <tr>
+                                <th>From (mm/dd/yyyy)</th>
+                                <th>To (mm/dd/yyyy)</th>
+                                <th>Name</th>
+                                <th>Date Elected</th>
+                                <th>Term of Office (no. of years)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" placeholder="Position"></td>
+                                <td><input type="date" class="appointment-date"></td>
+                                <td><input type="date" class="from-date"></td>
+                                <td><input type="date" class="to-date"></td>
+                                <td><input type="text" placeholder="Years" class="years-served" readonly></td>
+                                <td><input type="text" placeholder="Name"></td>
+                                <td><input type="date" class="elected-date"></td>
+                                <td><input type="text" placeholder="Term" class="term-office" readonly></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-      <label for="eff-date">Eff. Date</label>
-      <input type="date" id="eff-date" required>
+                <div class="certification-text">
+                    <p>This Certification is issued in support of the evaluation/processing of the application of <strong>
+                        <select class="form-control" style="display: inline-block; width: 80px; margin: 0 5px;">
+                            <option value="Ms.">Ms.</option>
+                            <option value="Mr.">Mr.</option>
+                        </select>
+                        <input type="text" class="form-control" style="display: inline-block; width: 200px; margin: 0 5px;" placeholder="Applicant Name" value="Alma M. Perez"></strong> for the grant of Barangay Official Eligibility pursuant to Republic Act No. 7160, in accordance with CSC Resolution No. 13 series of 2012.</p>
+                </div>
 
-      <label for="page">Page</label>
-      <input type="text" id="page" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" class="form-control" value="Lucena City, Quezon">
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" class="form-control" value="2025-04-29">
+                    </div>
+                </div>
 
-      <label for="ref-no">Reference No.</label>
-      <input type="text" id="ref-no" required>
+                <div class="signature-area">
+                    <div class="director-signature">
+                        <div class="director-name">Juan Dela Cruz</div>
+                        <div class="director-title">HUC Director</div>
+                    </div>
+                </div>
 
-      <label for="date-request">Date of Request</label>
-      <input type="date" id="date-request" required>
-
-      <label for="client-name">Name of Client/ Organization</label>
-      <input type="text" id="client-name" required>
-
-      <label for="contact-details">Contact Details</label>
-      <input type="text" id="contact-details" required>
+                <div class="btn-container">
+                    <button type="button" class="btn btn-secondary">← Previous</button>
+                    <button type="button" class="btn btn-primary">Next →</button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <!-- Step 2 -->
-    <div class="form-step">
-      <h3>Step 2: Other Needed Information</h3>
+    <script>
+        // Function to calculate years and months between two dates
+        function calculateTimeDifference(startDate, endDate) {
+            if (!startDate || !endDate) return '';
+            
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            
+            if (start > end) return '';
+            
+            let years = end.getFullYear() - start.getFullYear();
+            let months = end.getMonth() - start.getMonth();
+            
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+            
+            // Adjust for day differences
+            if (end.getDate() < start.getDate()) {
+                months--;
+                if (months < 0) {
+                    years--;
+                    months += 12;
+                }
+            }
+            
+            let result = '';
+            if (years > 0) {
+                result += years + (years === 1 ? ' year' : ' years');
+            }
+            if (months > 0) {
+                if (result) result += ' and ';
+                result += months + (months === 1 ? ' month' : ' months');
+            }
+            
+            return result || '0 months';
+        }
 
-      <label for="last-name">Last Name</label>
-      <input type="text" id="last-name" required>
+        // Function to calculate barangay official term (typically 3 years)
+        function calculateTermOfOffice(electedDate) {
+            if (!electedDate) return '';
+            
+            const elected = new Date(electedDate);
+            // Barangay officials typically serve 3-year terms
+            const termEnd = new Date(elected.getFullYear() + 3, elected.getMonth(), elected.getDate());
+            
+            return calculateTimeDifference(electedDate, termEnd.toISOString().split('T')[0]);
+        }
 
-      <label for="middle-name">Middle Name</label>
-      <input type="text" id="middle-name" required>
+        // Function to update calculations for a row
+        function updateCalculations(row) {
+            const fromDate = row.querySelector('.from-date').value;
+            const toDate = row.querySelector('.to-date').value;
+            const electedDate = row.querySelector('.elected-date').value;
+            
+            // Calculate years served (from service start to service end)
+            const yearsServed = calculateTimeDifference(fromDate, toDate);
+            row.querySelector('.years-served').value = yearsServed;
+            
+            // Calculate term of office (standard 3-year term for barangay officials)
+            const termOfOffice = calculateTermOfOffice(electedDate);
+            row.querySelector('.term-office').value = termOfOffice;
+        }
 
-      <label for="last-name-ext">Last Name, Ext.</label>
-      <input type="text" id="last-name-ext">
+        // Add event listeners to all date inputs in the table
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.certification-table input[type="date"]').forEach(input => {
+                input.addEventListener('change', function() {
+                    const row = this.closest('tr');
+                    updateCalculations(row);
+                });
+            });
+        });
 
-      <label for="address">Address</label>
-      <input type="text" id="address" required>
+        // Add some interactivity
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.background = 'white';
+            });
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.style.background = 'white';
+                }
+            });
+        });
 
-      <label for="position-held">Position</label>
-      <input type="text" id="position-held" required>
-
-      <label for="term-office">Term of Office</label>
-      <input type="text" id="term-office" required>
-    </div>
-
-    <!-- Step 3 -->
-    <div class="form-step">
-      <h3>Step 3: Select Official Type</h3>
-      <div class="choice-buttons">
-        <button type="button" onclick="selectOfficialType('appointed')">Appointed</button>
-        <button type="button" onclick="selectOfficialType('elected')">Elected</button>
-      </div>
-    </div>
-
-    <!-- Step 4 - Appointed Official Form -->
-    <div class="form-step" id="appointed-step" style="display:none;">
-      <h3>Appointive Official</h3>
-      <p><em>- Brgy. Treasurer, Brgy. Secretary</em></p>
-
-      <label for="app-last-name">Last Name</label>
-      <input type="text" id="app-last-name" required>
-
-      <label for="app-first-name">First Name</label>
-      <input type="text" id="app-first-name" required>
-
-      <label for="app-middle-name">Middle Name</label>
-      <input type="text" id="app-middle-name" required>
-
-      <label for="app-position">Position Held</label>
-      <input type="text" id="app-position" required>
-
-      <label for="app-date-appointment">Date Appointment (Start from most recent)</label>
-      <input type="date" id="app-date-appointment" required>
-
-      <label for="app-inclusive-from">Inclusive Dates of Years Served - From</label>
-      <input type="date" id="app-inclusive-from" required>
-
-      <label for="app-inclusive-to">Inclusive Dates of Years Served - To</label>
-      <input type="date" id="app-inclusive-to" required>
-
-      <label for="app-years-rendered">No. of Years Rendered</label>
-      <input type="number" id="app-years-rendered" min="0" required>
-
-      <label for="app-punong-name">Appointing Punong Barangay - Full Name</label>
-      <input type="text" id="app-punong-name" required>
-
-      <label for="app-punong-date-elected">Date Elected</label>
-      <input type="date" id="app-punong-date-elected" required>
-
-      <label for="app-punong-term-office">Term of Office (No. Of years)</label>
-      <input type="text" id="app-punong-term-office" required>
-
-      <label for="app-date-today">Date Today</label>
-      <input type="date" id="app-date-today" required>
-    </div>
-
-    <!-- Step 4 - Elected Official Form -->
-    <div class="form-step" id="elected-step" style="display:none;">
-      <h3>Elective Official</h3>
-      <p><em>- SK Chairperson/Chairman, Punong Brgy., Sanguniang Barangay Member (Brgy. Kagawad)</em></p>
-
-      <label for="ele-last-name">Last Name</label>
-      <input type="text" id="ele-last-name" required>
-
-      <label for="ele-first-name">First Name</label>
-      <input type="text" id="ele-first-name" required>
-
-      <label for="ele-middle-initial">Middle Initial</label>
-      <input type="text" id="ele-middle-initial" required>
-
-      <label for="ele-position-held">Position Held</label>
-      <input type="text" id="ele-position-held" required>
-
-      <label for="ele-date-election">Date of Election</label>
-      <input type="date" id="ele-date-election" required>
-
-      <label for="ele-term-office">Term of Office</label>
-      <input type="text" id="ele-term-office" required>
-
-      <label for="ele-inclusive-from">Inclusive Dates From</label>
-      <input type="date" id="ele-inclusive-from" required>
-
-      <label for="ele-inclusive-to">Inclusive Dates To</label>
-      <input type="date" id="ele-inclusive-to" required>
-
-      <label><input type="checkbox" id="ele-term-completed"> Term Completed?</label>
-
-      <label><input type="checkbox" id="ele-succeeded"> Succeeded to the Position?</label>
-    </div>
-
-    <!-- Step 5 - Review -->
-    <div class="form-step" id="review-step" style="display:none;">
-      <h3>Step 5: Review Your Information</h3>
-      <div id="review-content" style="background:#eee; padding: 15px; border-radius: 5px; max-height: 400px; overflow-y:auto;"></div>
-    </div>
-
-    <div class="button-group">
-      <button type="button" id="prev-btn" class="btn" onclick="prevStep()" disabled>Previous</button>
-      <button type="button" id="next-btn" class="btn" onclick="nextStep()">Next</button>
-      <button type="submit" id="submit-btn" class="btn" style="display:none;">Submit</button>
-    </div>
-  </form>
-</div>
-
-<script>
-  const form = document.getElementById('form-container-application');
-  const steps = Array.from(form.querySelectorAll('.form-step'));
-  const prevBtn = document.getElementById('prev-btn');
-  const nextBtn = document.getElementById('next-btn');
-  const submitBtn = document.getElementById('submit-btn');
-  const reviewContent = document.getElementById('review-content');
-
-  let currentStep = 0;
-  let officialType = null;  // appointed or elected
-
-  function showStep(step) {
-    steps.forEach((s, i) => {
-      s.classList.toggle('active', i === step);
-      // Handle appointed/elected step visibility for step 3
-      if (s.id === 'appointed-step' || s.id === 'elected-step') {
-        s.style.display = (i === step && officialType && s.id.startsWith(officialType)) ? 'block' : 'none';
-      }
-      if (s.id === 'review-step') {
-        s.style.display = (i === step) ? 'block' : 'none';
-      }
-    });
-
-    prevBtn.disabled = step === 0;
-    nextBtn.style.display = step === steps.length - 2 ? 'inline-block' : 'inline-block';
-    submitBtn.style.display = step === steps.length - 1 ? 'inline-block' : 'none';
-
-    if (step === steps.length - 1) {
-      displayReview();
-    }
-  }
-
-  function validateStep(step) {
-    const activeStep = steps[step];
-    const inputs = Array.from(activeStep.querySelectorAll('input, select, textarea')).filter(input => !input.disabled && input.required);
-    for (const input of inputs) {
-      if (input.type === 'checkbox') {
-        // skip required for checkbox (none are marked required here)
-        continue;
-      }
-      if (!input.value) {
-        alert(`Please fill out the field: "${input.previousElementSibling ? input.previousElementSibling.innerText : input.id}"`);
-        input.focus();
-        return false;
-      }
-    }
-    return true;
-  }
-
-  function nextStep() {
-    // Special case: If current step is 3 (index 3) and officialType not selected yet, block proceeding
-    if (currentStep === 2 && !officialType) {
-      alert('Please select an official type: Appointed or Elected.');
-      return;
-    }
-
-    if (!validateStep(currentStep)) return;
-
-    // If on step 3 (the officialType step), when next pressed:
-    if (currentStep === 2) {
-      // Show the appointed or elected form on step 4 accordingly
-      if (officialType === 'appointed') {
-        steps[3].id = 'appointed-step';
-      } else if (officialType === 'elected') {
-        steps[3].id = 'elected-step';
-      }
-    }
-
-    if (currentStep < steps.length - 1) {
-      currentStep++;
-      showStep(currentStep);
-    }
-  }
-
-  function prevStep() {
-    if (currentStep > 0) {
-      currentStep--;
-      showStep(currentStep);
-    }
-  }
-
-  function selectOfficialType(type) {
-    officialType = type;
-    // Show appointed or elected step
-    if (type === 'appointed') {
-      document.getElementById('appointed-step').style.display = 'block';
-      document.getElementById('elected-step').style.display = 'none';
-    } else {
-      document.getElementById('appointed-step').style.display = 'none';
-      document.getElementById('elected-step').style.display = 'block';
-    }
-  }
-
-  function displayReview() {
-    // Gather all form values and display in reviewContent
-    let html = '<h4>Basic Information</h4><ul>';
-    html += `<li>Document Code: ${document.getElementById('doc-code').value}</li>`;
-    html += `<li>Rev. No.: ${document.getElementById('rev-no').value}</li>`;
-    html += `<li>Eff. Date: ${document.getElementById('eff-date').value}</li>`;
-    html += `<li>Page: ${document.getElementById('page').value}</li>`;
-    html += `<li>Reference No.: ${document.getElementById('ref-no').value}</li>`;
-    html += `<li>Date of Request: ${document.getElementById('date-request').value}</li>`;
-    html += `<li>Name of Client/Organization: ${document.getElementById('client-name').value}</li>`;
-    html += `<li>Contact Details: ${document.getElementById('contact-details').value}</li>`;
-    html += '</ul>';
-
-    html += '<h4>Additional Information</h4><ul>';
-    html += `<li>Last Name: ${document.getElementById('last-name').value}</li>`;
-    html += `<li>Middle Name: ${document.getElementById('middle-name').value}</li>`;
-    html += `<li>Last Name, Ext.: ${document.getElementById('last-name-ext').value}</li>`;
-    html += `<li>Address: ${document.getElementById('address').value}</li>`;
-    html += `<li>Position: ${document.getElementById('position-held').value}</li>`;
-    html += `<li>Term of Office: ${document.getElementById('term-office').value}</li>`;
-    html += '</ul>';
-
-    html += `<h4>Official Type Selected: ${officialType.charAt(0).toUpperCase() + officialType.slice(1)}</h4>`;
-
-    if (officialType === 'appointed') {
-      html += '<h4>Appointed Official Information</h4><ul>';
-      html += `<li>Last Name: ${document.getElementById('app-last-name').value}</li>`;
-      html += `<li>First Name: ${document.getElementById('app-first-name').value}</li>`;
-      html += `<li>Middle Name: ${document.getElementById('app-middle-name').value}</li>`;
-      html += `<li>Position Held: ${document.getElementById('app-position').value}</li>`;
-      html += `<li>Date Appointment: ${document.getElementById('app-date-appointment').value}</li>`;
-      html += `<li>Inclusive Dates From: ${document.getElementById('app-inclusive-from').value}</li>`;
-      html += `<li>Inclusive Dates To: ${document.getElementById('app-inclusive-to').value}</li>`;
-      html += `<li>No. of Years Rendered: ${document.getElementById('app-years-rendered').value}</li>`;
-      html += `<li>Appointing Punong Barangay: ${document.getElementById('app-punong-name').value}</li>`;
-      html += `<li>Date Elected (Punong Barangay): ${document.getElementById('app-punong-date-elected').value}</li>`;
-      html += `<li>Term of Office (Punong Barangay): ${document.getElementById('app-punong-term-office').value}</li>`;
-      html += `<li>Date Today: ${document.getElementById('app-date-today').value}</li>`;
-      html += '</ul>';
-    } else if (officialType === 'elected') {
-      html += '<h4>Elected Official Information</h4><ul>';
-      html += `<li>Last Name: ${document.getElementById('ele-last-name').value}</li>`;
-      html += `<li>First Name: ${document.getElementById('ele-first-name').value}</li>`;
-      html += `<li>Middle Initial: ${document.getElementById('ele-middle-initial').value}</li>`;
-      html += `<li>Position Held: ${document.getElementById('ele-position-held').value}</li>`;
-      html += `<li>Date of Election: ${document.getElementById('ele-date-election').value}</li>`;
-      html += `<li>Term of Office: ${document.getElementById('ele-term-office').value}</li>`;
-      html += `<li>Inclusive Dates From: ${document.getElementById('ele-inclusive-from').value}</li>`;
-      html += `<li>Inclusive Dates To: ${document.getElementById('ele-inclusive-to').value}</li>`;
-      html += `<li>Term Completed: ${document.getElementById('ele-term-completed').checked ? 'Yes' : 'No'}</li>`;
-      html += `<li>Succeeded to the Position: ${document.getElementById('ele-succeeded').checked ? 'Yes' : 'No'}</li>`;
-      html += '</ul>';
-    }
-
-    reviewContent.innerHTML = html;
-  }
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    alert('Form submitted successfully!');
-    // You can do actual form submission here (send data to server)
-    form.reset();
-    currentStep = 0;
-    officialType = null;
-    showStep(currentStep);
-    // Reset appointed/elected visibility
-    document.getElementById('appointed-step').style.display = 'none';
-    document.getElementById('elected-step').style.display = 'none';
-  });
-
-  // Initialize display
-  showStep(currentStep);
-</script>
-
+        // Dynamic table row addition
+        function addTableRow() {
+            const table = document.querySelector('.certification-table tbody');
+            const newRow = table.insertRow();
+            for (let i = 0; i < 8; i++) {
+                const cell = newRow.insertCell();
+                const input = document.createElement('input');
+                input.type = i === 1 || i === 2 || i === 3 || i === 6 ? 'date' : 'text';
+                input.placeholder = ['Position', 'Date', 'From Date', 'To Date', 'Years', 'Name', 'Date Elected', 'Term'][i];
+                
+                // Add classes for automatic calculation
+                if (i === 1) input.className = 'appointment-date';
+                if (i === 2) input.className = 'from-date';
+                if (i === 3) input.className = 'to-date';
+                if (i === 4) {
+                    input.className = 'years-served';
+                    input.readOnly = true;
+                }
+                if (i === 6) input.className = 'elected-date';
+                if (i === 7) {
+                    input.className = 'term-office';
+                    input.readOnly = true;
+                }
+                
+                cell.appendChild(input);
+                
+                // Add event listener for date inputs
+                if (input.type === 'date') {
+                    input.addEventListener('change', function() {
+                        const row = this.closest('tr');
+                        updateCalculations(row);
+                    });
+                }
+            }
+        }
+    </script>
 </body>
 </html>

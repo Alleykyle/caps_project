@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,18 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Employees Profile</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', sans-serif;
-    }
-
     body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
       display: flex;
       height: 100vh;
-      background-color: #f4f4f4;
     }
 
     /* Sidebar */
@@ -28,10 +25,27 @@
       flex-direction: column;
       border-right: 1px solid #ccc;
     }
-
-    .logo {
+    .sidebar .logo {
       text-align: center;
       margin-bottom: 30px;
+    }
+    .sidebar .logo img {
+      width: 100px;
+    }
+    .sidebar ul {
+      list-style: none;
+    }
+    .sidebar ul li {
+      padding: 15px;
+      color: #222;
+      font-weight: 600;
+      cursor: pointer;
+      border-left: 5px solid transparent;
+    }
+    .sidebar ul li.active,
+    .sidebar ul li:hover {
+      background-color: #f2e9c9;
+      border-left: 5px solid #d8b400;
     }
 
     .sidebar a {
@@ -44,85 +58,177 @@
       font-weight: 500;
     }
 
-    .sidebar a:hover {
-      background-color: #f0f0f0;
-    }
-
     .active {
-      background-color: #dcc990;
-      border-left: 4px solid red;
+      background-color: #f2e9c9;
+      border-left: 5px solid #003366;
     }
 
     /* Main content */
     .main-content {
       flex: 1;
-      background: url('https://www.transparenttextures.com/patterns/cubes.png');
+      background-color: #f4f4f4;
+      padding: 20px 30px;
+      overflow-y: auto;
+      background: url('/static/images/background.jpg') no-repeat center center fixed;
       background-size: cover;
-      padding: 20px;
+      position: relative;
     }
+    .main-content::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      
+      z-index: 0;
+    }
+    .main-content > * {
+      position: relative;
+      z-index: 1;
+    }
+    
 
     .header {
       color: white;
-      font-size: 26px;
+      font-size: 35px;
       font-weight: bold;
-      margin-bottom: 20px;
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      margin-right: 400px;
+      margin-top: 40px;
     }
+    /* Icons container */
+.icons {
+  position: absolute;
+  right: 20px;
+  top: 1px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-top: 10px;
+}
 
-    .search-container {
+/* Bell icon */
+
+
+  .search-container {
       text-align: right;
-      margin-bottom: 20px;
-    }
+      margin-bottom: 65px;
+      
+  }
 
-    .search-bar {
-      padding: 8px 12px;
-      width: 250px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      outline: none;
-    }
+  .search-bar {
+    padding: 8px 12px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+  }
+    
 
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-    }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    padding: 0 10px;
+  }
 
-    .card {
-      background-color: white;
-      border-radius: 10px;
-      padding: 15px;
-      text-align: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
+  .card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 30px 25px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #f2e9c9);
+  }
 
-    .card img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background-color: #ccc;
-      margin-bottom: 10px;
-    }
+  .profile-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #d4d4d4, #a8a8a8);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  .profile-img::after {
+    content: '👤';
+    font-size: 32px;
+    color: #666;
+  }
 
-    .card h3 {
-      margin: 5px 0;
-      font-size: 16px;
-    }
 
-    .card p {
-      font-size: 14px;
-      margin: 4px 0;
-    }
+  .card h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+  }
 
-    .card input, .card select {
-      width: 80%;
-      padding: 5px;
-      margin-top: 5px;
-      border: 1px solid #aaa;
-      border-radius: 4px;
-    }
+  .card p {
+    color: #666;
+    margin-bottom: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card input[type="text"] {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 14px;
+    width: 80px;
+    transition: all 0.3s ease;
+  }
+
+  .card select {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .card select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
 
     .buttons {
       margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      justify-content: center;
+      padding-top: 20px;
     }
 
     .buttons button {
@@ -136,16 +242,68 @@
     .edit-btn {
       background-color: #111;
       color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
 
     .save-btn {
       background-color: #003366;
       color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    .edit-btn:hover, .save-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
     }
 
     .delete-btn {
       background-color: #ccc;
       color: black;
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    }
+    .delete-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+    }
+    .empty-card {
+      background: rgba(255, 255, 255, 0.3);
+      border: 2px dashed rgba(255, 255, 255, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .empty-card:hover {
+      background: rgba(255, 255, 255, 0.4);
+      border-color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.9);
     }
 
     .icon-btn {
@@ -155,6 +313,68 @@
       font-size: 18px;
       color: #333;
     }
+    .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    text-align: center;
+}
+
+.modal-buttons button {
+    margin: 10px;
+}
+
+.confirm-btn {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.cancel-btn {
+    background-color: #ccc;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+      @media (max-width: 768px) {
+            .header-section {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
 
   </style>
 </head>
@@ -162,65 +382,465 @@
 
   <!-- Sidebar -->
   <div class="sidebar">
-    <div class="logo">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/DILG_Seal.svg/2048px-DILG_Seal.svg.png" alt="DILG Logo">
-    </div>
-    <ul>
-      <li class="active"><a href={% url 'landing:dashboard' %}>Dashboard</a></li>
-      <li><a href={% url 'landing:application_request' %}>Application Request</a></li>
-      <li><a href={% url 'landing:history' %}>History</a></li>
-      <li><a href={% url 'landing:employees_profile' %}>Employees Profile</a></li>
-      <li><a href={% url 'landing:fold' %}>Folders</a></li>
-    </ul>
-  </div>
+    <img src="{% static 'images/DILG-Logo.png' %}" alt="DILG Logo" class="sidebar-logo" />
 
+   <ul>
+    <li>
+        <a href="{% url 'landing:dashboard' %}" 
+           class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            Dashboard
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'landing:application_request' %}" 
+           class="{% if request.resolver_match.url_name == 'application_request' %}active{% endif %}">
+            Application Request
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'landing:history' %}" 
+           class="{% if request.resolver_match.url_name == 'history' %}active{% endif %}">
+            History
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'landing:employees_profile' %}" 
+           class="{% if request.resolver_match.url_name == 'employees_profile' %}active{% endif %}">
+            Employees Profile
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'landing:fold' %}" 
+           class="{% if request.resolver_match.url_name == 'fold' %}active{% endif %}">
+            Folders
+        </a>
+    </li>
+    {# <li><a href="{% url 'settings' %}">Settings</a></li> #}
+</ul>
+  </div>
+  </div>
   <!-- Main content -->
-  <div class="main-content">
-    <div class="header">Employees Profile</div>
+    <div class="main-content">  
+        <div class="header-section">
+            <div class="header-left">
+                <div class="header">
+                    Employees Profile
+                </div>
+            </div>
+               <div class="icons">
+        <img src="{% static 'images/notif.png' %}" alt="Notifications" style="width: 24px; height: 24px; cursor: pointer;"/>
+        <div class="home-icon">
+          <a href="{% url 'landing:landing_page' %}">
+            <img src="{% static 'images/menu.png' %}" alt="Menu" style="width: 24px; height: 24px; cursor: pointer; "/>
+          </a>     
+      </div>
+        </div>
+        
+        <div class="search-container">
+            <input class="search-bar" type="text" placeholder="Search employees..." id="searchBar">
+        </div>
 
-    <div class="search-container">
-      <input class="search-bar" type="text" placeholder="Search...">
+        <div class="card-grid" id="cardGrid">
+            <!-- Employee cards will be loaded here dynamically -->
+            <div class="card empty-card" onclick="addNewEmployee(this)" style="cursor: pointer;">
+                + Add New Employee
+            </div>
+        </div>
+    </div>
+    
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Confirm Delete</h3>
+            <p>⚠️Are you sure you want to delete this employee? This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button class="confirm-btn" onclick="confirmDelete()">Delete</button>
+                <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
     </div>
 
-    <div class="card-grid">
-      <!-- Display mode card -->
-      <div class="card">
-        <img src="" alt="Profile">
-        <h3>Mary Dhil Saromines</h3>
-        <p>Id no. : 123</p>
-        <p>Task Assign: Monitoring</p>
-        <div class="buttons">
-          <button class="edit-btn">Edit</button>
-        </div>
-      </div>
+    <script>
+        let cardToDelete = null;
+        let employeeIdToDelete = null;
+        let allEmployees = [];
 
-      <!-- Editable mode card -->
-      <div class="card">
-        <img src="" alt="Profile">
-        <h3>Mary Dhil Saromines</h3>
-        <p>
-          Id no. : <input type="text" value="123" />
-        </p>
-        <p>
-          Task Assign:
-          <select>
-            <option>Monitoring</option>
-            <option>Documentation</option>
-          </select>
-        </p>
-        <div class="buttons">
-          <button class="icon-btn" title="Delete">&#128465;</button>
-          <button class="save-btn">Save</button>
-        </div>
-      </div>
+        // Load employees when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadEmployees();
+        });
 
-      <!-- More blank cards as placeholders -->
-      <div class="card"></div>
-      <div class="card"></div>
-      <div class="card"></div>
-      <div class="card"></div>
-    </div>
-  </div>
+        // Load all employees from backend
+        function loadEmployees() {
+            fetch('/api/employees/')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        allEmployees = data.employees;
+                        renderEmployees(allEmployees);
+                    } else {
+                        showNotification('Error loading employees: ' + data.error, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Failed to load employees', 'error');
+                });
+        }
 
+        // Render employees on the page
+        function renderEmployees(employees) {
+            const cardGrid = document.getElementById('cardGrid');
+            
+            // Remove all existing employee cards but keep empty card
+            const existingCards = cardGrid.querySelectorAll('.card:not(.empty-card)');
+            existingCards.forEach(card => card.remove());
+
+            // Add employee cards
+            employees.forEach(employee => {
+                const card = createEmployeeCard(employee);
+                cardGrid.insertBefore(card, cardGrid.lastElementChild);
+            });
+        }
+
+        // Create employee card HTML
+        function createEmployeeCard(employee) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.setAttribute('data-employee-id', employee.id);
+            
+            card.innerHTML = `
+                <div class="profile-img"></div>
+                <h3>${employee.name}</h3>
+                <p><strong>Id no.:</strong> ${employee.employee_id}</p>
+                <p><strong>Task Assign:</strong> ${employee.task_assign}</p>
+                <div class="buttons">
+                    <button class="edit-btn" onclick="toggleEdit(this)">Edit</button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Toggle between edit and view mode
+        function toggleEdit(button) {
+            const card = button.closest('.card');
+            const isEditing = card.classList.contains('editing');
+
+            if (isEditing) {
+                saveEmployee(card);
+            } else {
+                switchToEditMode(card);
+            }
+        }
+
+        // Switch card to edit mode
+        function switchToEditMode(card) {
+            card.classList.add('editing');
+
+            const nameElement = card.querySelector('h3');
+            const idParagraph = card.querySelector('p:nth-of-type(1)');
+            const taskParagraph = card.querySelector('p:nth-of-type(2)');
+            const buttonsDiv = card.querySelector('.buttons');
+
+            const currentName = nameElement.textContent;
+            const currentId = idParagraph.textContent.replace('Id no.: ', '');
+            const currentTask = taskParagraph.textContent.replace('Task Assign: ', '');
+
+            // Replace name with input
+            nameElement.innerHTML = `<input type="text" value="${currentName}" style="font-size: 18px; font-weight: 600; color: #333; text-align: center; border: 1px solid #ddd; padding: 8px; border-radius: 8px; width: 90%;" />`;
+
+            // Replace ID with input
+            idParagraph.innerHTML = `<strong>Id no.:</strong> <input type="text" value="${currentId}" />`;
+            
+            // Replace task with select
+            taskParagraph.innerHTML = `
+                <strong>Task Assign:</strong>
+                <select>
+                    <option ${currentTask === 'Monitoring' ? 'selected' : ''}>Monitoring</option>
+                    <option ${currentTask === 'Documentation' ? 'selected' : ''}>Documentation</option>
+                    <option ${currentTask === 'Analysis' ? 'selected' : ''}>Analysis</option>
+                    <option ${currentTask === 'Support' ? 'selected' : ''}>Support</option>
+                </select>
+            `;
+
+            buttonsDiv.innerHTML = `
+                <button class="delete-btn" title="Delete" onclick="showDeleteModal(this)">
+                    <img src="{% static 'images/bin.png' %}" alt="Delete" width="16" height="16">
+                </button>
+                <button class="save-btn" onclick="toggleEdit(this)">Save</button>
+            `;
+        }
+
+        // Save employee changes
+        function saveEmployee(card) {
+            const employeeId = card.getAttribute('data-employee-id');
+            const nameInput = card.querySelector('h3 input');
+            const idInput = card.querySelector('p:nth-of-type(1) input');
+            const taskSelect = card.querySelector('p:nth-of-type(2) select');
+
+            if (!nameInput || !idInput || !taskSelect) {
+                showNotification('Error: Missing form fields', 'error');
+                return;
+            }
+
+            const data = {
+                name: nameInput.value.trim(),
+                employee_id: idInput.value.trim(),
+                task_assign: taskSelect.value
+            };
+
+            // Validation
+            if (!data.name) {
+                nameInput.style.border = '2px solid #ff6b6b';
+                nameInput.focus();
+                showNotification('Please enter employee name', 'error');
+                return;
+            }
+
+            if (!data.employee_id) {
+                idInput.style.border = '2px solid #ff6b6b';
+                idInput.focus();
+                showNotification('Please enter employee ID', 'error');
+                return;
+            }
+
+            // Show loading state
+            card.classList.add('loading');
+
+            const url = employeeId ? `/api/employees/update/${employeeId}/` : '/api/employees/add/';
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(responseData => {
+                card.classList.remove('loading');
+                
+                if (responseData.success) {
+                    // Update card with new data
+                    const employee = responseData.employee;
+                    card.setAttribute('data-employee-id', employee.id);
+                    
+                    // Switch back to display mode
+                    switchToDisplayMode(card, employee);
+                    
+                    showNotification(employeeId ? 'Employee updated successfully!' : 'Employee added successfully!', 'success');
+                    
+                    // Reload employees to ensure data consistency
+                    loadEmployees();
+                } else {
+                    showNotification('Error: ' + responseData.error, 'error');
+                    
+                    // Highlight the problematic field
+                    if (responseData.error.includes('Employee ID')) {
+                        idInput.style.border = '2px solid #ff6b6b';
+                        idInput.focus();
+                    }
+                }
+            })
+            .catch(error => {
+                card.classList.remove('loading');
+                console.error('Error:', error);
+                showNotification('Failed to save employee', 'error');
+            });
+        }
+
+        // Switch card to display mode
+        function switchToDisplayMode(card, employee) {
+            card.classList.remove('editing');
+
+            const nameElement = card.querySelector('h3');
+            const idParagraph = card.querySelector('p:nth-of-type(1)');
+            const taskParagraph = card.querySelector('p:nth-of-type(2)');
+            const buttonsDiv = card.querySelector('.buttons');
+
+            nameElement.innerHTML = employee.name;
+            idParagraph.innerHTML = `<strong>Id no.:</strong> ${employee.employee_id}`;
+            taskParagraph.innerHTML = `<strong>Task Assign:</strong> ${employee.task_assign}`;
+
+            buttonsDiv.innerHTML = `
+                <button class="edit-btn" onclick="toggleEdit(this)">Edit</button>
+            `;
+        }
+
+        // Show delete confirmation modal
+        function showDeleteModal(button) {
+            cardToDelete = button.closest('.card');
+            employeeIdToDelete = cardToDelete.getAttribute('data-employee-id');
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        // Confirm delete employee
+        function confirmDelete() {
+            if (!employeeIdToDelete) {
+                showNotification('Error: No employee selected for deletion', 'error');
+                closeModal();
+                return;
+            }
+
+            fetch(`/api/employees/delete/${employeeIdToDelete}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    cardToDelete.style.transform = 'scale(0.8)';
+                    cardToDelete.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        cardToDelete.remove();
+                    }, 300);
+                    
+                    showNotification(data.message, 'success');
+                } else {
+                    showNotification('Error: ' + data.error, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Failed to delete employee', 'error');
+            });
+
+            closeModal();
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            cardToDelete = null;
+            employeeIdToDelete = null;
+        }
+
+        // Add new employee
+        function addNewEmployee(emptyCard) {
+            const newCard = document.createElement('div');
+            newCard.className = 'card';
+            
+            newCard.innerHTML = `
+                <div class="profile-img"></div>
+                <h3><input type="text" placeholder="Enter employee name" style="font-size: 18px; font-weight: 600; color: #333; text-align: center; border: 2px solid #667eea; padding: 8px; border-radius: 8px; width: 90%;" /></h3>
+                <p>
+                    <strong>Id no.:</strong> 
+                    <input type="text" placeholder="ID" />
+                </p>
+                <p>
+                    <strong>Task Assign:</strong>
+                    <select>
+                        <option>Monitoring</option>
+                        <option>Documentation</option>
+                        <option>Analysis</option>
+                        <option>Support</option>
+                    </select>
+                </p>
+                <div class="buttons">
+                    <button class="delete-btn" onclick="cancelNewEmployee(this)" title="Cancel">❌</button>
+                    <button class="save-btn" onclick="saveNewEmployee(this)">Save</button>
+                </div>
+            `;
+            
+            emptyCard.parentNode.insertBefore(newCard, emptyCard);
+            
+            // Focus on the name field
+            const nameField = newCard.querySelector('h3 input');
+            if (nameField) {
+                nameField.focus();
+            }
+        }
+
+        // Save new employee
+        function saveNewEmployee(button) {
+            const card = button.closest('.card');
+            
+            // Mark as editing to use the same save function
+            card.classList.add('editing');
+            
+            // Save using the existing save function
+            saveEmployee(card);
+        }
+
+        // Cancel new employee creation
+        function cancelNewEmployee(button) {
+            const card = button.closest('.card');
+            card.remove();
+        }
+
+        // Search functionality
+        document.getElementById('searchBar').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredEmployees = allEmployees.filter(employee => {
+                return employee.name.toLowerCase().includes(searchTerm) ||
+                       employee.employee_id.toLowerCase().includes(searchTerm) ||
+                       employee.task_assign.toLowerCase().includes(searchTerm);
+            });
+            
+            renderEmployees(filteredEmployees);
+        });
+
+        // Show notification
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                border-radius: 10px;
+                color: white;
+                font-weight: 600;
+                z-index: 1000;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+                transform: translateX(400px);
+                transition: all 0.3s ease;
+                backdrop-filter: blur(10px);
+            `;
+            
+            if (type === 'success') {
+                notification.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
+            } else if (type === 'error') {
+                notification.style.background = 'linear-gradient(135deg, #ff6b6b, #ee5a52)';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
 </body>
 </html>

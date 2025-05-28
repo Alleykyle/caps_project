@@ -1,30 +1,48 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>History</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       display: flex;
-      background-color: #fdfaf5;
+      height: 100vh;
     }
 
-    /* Sidebar */
     .sidebar {
-      width: 220px;
-      background-color: white;
-      border-right: 1px solid #ddd;
+      width: 240px;
+      background-color: #fff5dd;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding-top: 20px;
+      border-right: 1px solid #ccc;
     }
-
-    .logo {
-      margin-bottom: 20px;
+    .sidebar .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .sidebar .logo img {
+      width: 100px;
+    }
+    .sidebar ul {
+      list-style: none;
+    }
+    .sidebar ul li {
+      padding: 15px;
+      color: #222;
+      font-weight: 600;
+      cursor: pointer;
+      border-left: 5px solid transparent;
+    }
+    .sidebar ul li.active,
+    .sidebar ul li:hover {
+      background-color: #f2e9c9;
+      border-left: 5px solid #d8b400;
     }
 
     .sidebar a {
@@ -37,148 +55,833 @@
       font-weight: 500;
     }
 
-    .sidebar a:hover {
-      background-color: #f0f0f0;
-    }
-
     .active {
-      background-color: #dcc990;
-      border-left: 4px solid red;
+      background-color: #f2e9c9;
+      border-left: 5px solid #003366;
     }
 
-    /* Content */
     .main-content {
       flex: 1;
-    }
+      display: flex;
+      flex-direction: column;
+      background-color: #f8f9fa;
+      overflow: hidden;
+      background: url('/static/images/background.jpg') no-repeat center center fixed;
+      background-size: cover;
 
-    .header {
-      background-color: #0e2a52;
+    }
+     .header {
+      background: linear-gradient(135deg, #0e2a52 0%, #1e3a72 100%);
       color: white;
-      padding: 20px;
-      font-size: 24px;
+      padding: 25px 30px;
+      font-size: 28px;
       font-weight: bold;
-    }
-
-    .table-header {
-      background-color: #f7f2ea;
-      padding: 15px 30px;
-      font-weight: bold;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       display: flex;
       justify-content: space-between;
-      border-bottom: 2px solid #003366;
+      align-items: center;
+    }
+   
+
+    .header-actions {
+      display: flex;
+      gap: 15px;
     }
 
+    .notification-icon, .menu-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 20%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .notification-icon:hover, .menu-icon:hover {
+      background-color: rgba(255,255,255,0.3);
+    }
+
+    /* Table Container */
+    .table-container {
+      flex: 1;
+      background-color: white;
+      margin: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+     /* Action Bar */
+    .action-bar {
+      background-color: #f8f9fa;
+      padding: 15px 30px;
+      border-bottom: 1px solid #e8e8e8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 5px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+     .btn-mark-read {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .btn-mark-read:hover {
+      background-color: #218838;
+    }
+
+    .btn-delete {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background-color: #c82333;
+    }
+
+    .btn-select-all {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    .btn-select-all:hover {
+      background-color: #5a6268;
+    }
+
+    /* Checkbox Styles */
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .checkbox {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: #003366;
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background-color: white;
+      border-radius: 10px;
+      padding: 30px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transform: scale(0.7);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.show .modal {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      font-size: 18px;
+      font-weight: bold;
+      color: #003366;
+      margin-bottom: 15px;
+    }
+
+    .modal-body {
+      color: #666;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .btn-cancel {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    .btn-cancel:hover {
+      background-color: #5a6268;
+    }
+
+    .btn-confirm {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .btn-confirm:hover {
+      background-color: #c82333;
+    }
+
+    /* Unread indicator */
+    .row.unread {
+      background-color: #e3f2fd;
+      border-left: 4px solid #2196f3;
+    }
+
+    .row.unread .dot {
+      background-color: #2196f3;
+    }
+
+    /* Selected row */
+    .row.selected {
+      background-color: #e8f4fd;
+      border-left: 4px solid #007bff;
+    }
+
+
+
+    /* Table Header */
+    .table-header {
+      background: linear-gradient(135deg, #f7f2ea 0%, #ede4d0 100%);
+      padding: 20px 30px;
+      font-weight: bold;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #003366;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 20px;
+      align-items: center;
+      border-bottom: 3px solid #003366;
+    }
+
+    .table-header div:last-child {
+      text-align: right;
+    }
+
+    /* Table Content */
     .table-content {
-      padding: 0 30px;
+      flex: 1;
+      overflow-y: auto;
+      max-height: calc(100vh - 200px);
     }
 
     .row {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 20px;
       align-items: center;
-      border-bottom: 1px solid #ccc;
-      padding: 20px 0;
+      padding: 20px 30px;
+      border-bottom: 1px solid #e8e8e8;
+      transition: background-color 0.2s ease;
     }
 
-    .highlight {
-      background-color: #f4e7bc;
+    .row:hover {
+      background-color: #f8f9fa;
     }
 
+    .row.highlight {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffc107;
+    }
+
+    /* Activity Column */
     .activity {
       display: flex;
       align-items: center;
-      max-width: 50%;
+      gap: 15px;
     }
 
     .dot {
-      width: 20px;
-      height: 20px;
-      background-color: #001f4d;
+      width: 12px;
+      height: 12px;
+      background-color: #003366;
       border-radius: 50%;
-      margin-right: 15px;
+      flex-shrink: 0;
     }
 
-    .right {
+    .activity-text {
+      font-size: 14px;
+      line-height: 1.4;
+      color: #333;
+    }
+
+    /* Date Column */
+    .date {
+      font-size: 14px;
+      color: #666;
+      font-weight: 500;
+    }
+
+    /* Processed By Column */
+    .processed-by {
       text-align: right;
+      font-size: 14px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    /* Status Indicators */
+    .status-approved {
+      color: #28a745;
+      font-weight: 600;
+    }
+
+    .status-denied {
+      color: #dc3545;
+      font-weight: 600;
+    }
+
+     /* Responsive Design */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: fixed;
+        top: 0;
+        left: -100%;
+        z-index: 1000;
+        transition: left 0.3s ease;
+      }
+
+      .sidebar.open {
+        left: 0;
+      }
+
+      .main-content {
+        width: 100%;
+      }
+
+      .table-header,
+      .row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .processed-by {
+        text-align: left;
+      }
+
+      .header {
+        font-size: 24px;
+        padding: 20px;
+      }
+    }
+
+    /* Scrollbar Styling */
+    .table-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .table-content::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    .table-content::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 3px;
+    }
+
+    .table-content::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+
+    /* Scrollbar Styling */
+    .table-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .table-content::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    .table-content::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 3px;
+    }
+
+    .table-content::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
     }
   </style>
 </head>
 <body>
+  <div class="sidebar">
+    <img src="{% static 'images/DILG-Logo.png' %}" alt="DILG Logo" class="sidebar-logo" />
 
-    <ul>
-        <li class="active"><a href={% url 'landing:dashboard' %}>Dashboard</a></li>
-        <li><a href={% url 'landing:application_request' %}>Application Request</a></li>
-        <li><a href={% url 'landing:history' %}>History</a></li>
-        <li><a href={% url 'landing:employees_profile' %}>Employees Profile</a></li>
-        <li><a href={% url 'landing:fold' %}>Folders</a></li>
-        {% comment %} 
-        <li><a href={% url 'settings' %}>Settings</a></li> {% endcomment %}
-      </ul>
+   <ul>
+    <li>
+        <a href="{% url 'landing:dashboard' %}" 
+           class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            Dashboard
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'landing:application_request' %}" 
+           class="{% if request.resolver_match.url_name == 'application_request' %}active{% endif %}">
+            Application Request
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'landing:history' %}" 
+           class="{% if request.resolver_match.url_name == 'history' %}active{% endif %}">
+            History
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'landing:employees_profile' %}" 
+           class="{% if request.resolver_match.url_name == 'employees_profile' %}active{% endif %}">
+            Employees Profile
+        </a>
+    </li>
+    <li>
+        <a href="{% url 'landing:fold' %}" 
+           class="{% if request.resolver_match.url_name == 'fold' %}active{% endif %}">
+            Folders
+        </a>
+    </li>
+    {# <li><a href="{% url 'settings' %}">Settings</a></li> #}
+</ul>
+  </div>
 
-  <div class="main-content">
-    <div class="header">History</div>
-    <div class="table-header">
-      <div>ACTIVITIES</div>
-      <div>DATE</div>
-      <div>PROCESSED BY</div>
+   <div class="main-content">
+    <div class="header">
+      <span>History</span>
+      <div class="header-actions">
+        <div class="notification-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="white" viewBox="0 0 24 24">
+          <path d="M12 24c1.104 0 2-.897 2-2h-4c0 1.103.896 2 2 2zm6.707-5.293L18 18V11c0-3.309-2.691-6-6-6S6 7.691 6 11v7l-.707.707C4.521 19.479 5.262 21 6.828 21h10.344c1.566 0 2.307-1.521 1.535-2.293z"/>
+        </svg>
+        </div>
+        <div class="menu-icon">
+          <a href="{% url 'landing:landing_page' %}">☰</a>   
+        </div>  
+      </div>
     </div>
-    <div class="table-content">
-      <div class="row">
-        <div class="activity">
-          <div class="dot"></div>
-          <span>Application Form no. 12, APPROVED by meow meow meow</span>
+
+    <div class="table-container">
+      <div class="action-bar">
+        <div class="checkbox-container">
+          <input type="checkbox" id="selectAll" class="checkbox">
+          <label for="selectAll">Select All</label>
         </div>
-        <div>April 1, 2025</div>
-        <div class="right">Leslie Faith D. Navaja</div>
+        <div class="action-buttons">
+          <button class="btn btn-mark-read" id="markReadBtn">
+            ✓ Mark as Read
+          </button>
+          <button class="btn btn-delete" id="deleteBtn">
+            🗑️ Delete Selected
+          </button>
+        </div>
       </div>
 
-      <div class="row">
-        <div class="activity">
-          <div class="dot"></div>
-          <span>Application form no.23, DENIED bu meow meow.</span>
-        </div>
-        <div>April 1, 2025</div>
-        <div class="right">Leslie Faith D. Navaja</div>
+
+      <div class="table-header">
+        <div>ACTIVITIES</div>
+        <div>DATE</div>
+        <div>PROCESSED BY</div>
       </div>
 
-      <div class="row highlight">
-        <div class="activity">
-          <div class="dot"></div>
-          <span>Approval of Application Form. Meow meow meow from markeugine@gmail.com</span>
+       <div class="table-content">
+        <div class="row unread" data-id="1">
+          <div class="activity">
+            <input type="checkbox" class="checkbox row-checkbox">
+            <div class="dot"></div>
+            <span class="activity-text">Application Form no. 12, <span class="status-approved">APPROVED</span> by John Doe</span>
+          </div>
+          <div class="date">April 1, 2025</div>
+          <div class="processed-by">Leslie Faith D. Navaja</div>
         </div>
-        <div>April 1, 2025</div>
-        <div class="right">Leslie Faith D. Navaja</div>
-      </div>
 
-      <!-- Repeat rows -->
-      <div class="row">
-        <div class="activity">
-          <div class="dot"></div>
-          <span>Approval of Application Form. Meow meow meow from markeugine@gmail.com</span>
+        <div class="row unread" data-id="2">
+          <div class="activity">
+            <input type="checkbox" class="checkbox row-checkbox">
+            <div class="dot"></div>
+            <span class="activity-text">Application form no. 23, <span class="status-denied">DENIED</span> by Jane Smith</span>
+          </div>
+          <div class="date">April 1, 2025</div>
+          <div class="processed-by">Leslie Faith D. Navaja</div>
         </div>
-        <div>April 1, 2025</div>
-        <div class="right">Leslie Faith D. Navaja</div>
-      </div>
 
-      <div class="row">
-        <div class="activity">
-          <div class="dot"></div>
-          <span>Approval of Application Form. Meow meow meow from markeugine@gmail.com</span>
+        <div class="row highlight unread" data-id="3">
+          <div class="activity">
+            <input type="checkbox" class="checkbox row-checkbox">
+            <div class="dot"></div>
+            <span class="activity-text">Approval of Application Form. Request from markeugine@gmail.com</span>
+          </div>
+          <div class="date">April 1, 2025</div>
+          <div class="processed-by">Leslie Faith D. Navaja</div>
         </div>
-        <div>April 1, 2025</div>
-        <div class="right">Leslie Faith D. Navaja</div>
-      </div>
 
-      <div class="row">
-        <div class="activity">
-          <div class="dot"></div>
-          <span>Approval of Application Form. Meow meow meow from markeugine@gmail.com</span>
+        <div class="row" data-id="4">
+          <div class="activity">
+            <input type="checkbox" class="checkbox row-checkbox">
+            <div class="dot"></div>
+            <span class="activity-text">Approval of Application Form. Request from markeugine@gmail.com</span>
+          </div>
+          <div class="date">April 1, 2025</div>
+          <div class="processed-by">Leslie Faith D. Navaja</div>
         </div>
-        <div>April 1, 2025</div>
-        <div class="right">Leslie Faith D. Navaja</div>
+
+        <div class="row unread" data-id="5">
+          <div class="activity">
+            <input type="checkbox" class="checkbox row-checkbox">
+            <div class="dot"></div>
+            <span class="activity-text">Document Review Completed. Form ID: 45</span>
+          </div>
+          <div class="date">March 30, 2025</div>
+          <div class="processed-by">Mark Eugene Santos</div>
+        </div>
+
+        <div class="row" data-id="6">
+          <div class="activity">
+            <input type="checkbox" class="checkbox row-checkbox">
+            <div class="dot"></div>
+            <span class="activity-text">New Application Submitted. Reference: APP-2025-156</span>
+          </div>
+          <div class="date">March 29, 2025</div>
+          <div class="processed-by">Leslie Faith D. Navaja</div>
+        </div>
+
+        <div class="row" data-id="7">
+          <div class="activity">
+            <input type="checkbox" class="checkbox row-checkbox">
+            <div class="dot"></div>
+            <span class="activity-text">System Backup Completed Successfully</span>
+          </div>
+          <div class="date">March 28, 2025</div>
+          <div class="processed-by">System Administrator</div>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- Confirmation Modal -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal">
+      <div class="modal-header" id="modalTitle">Confirm Action</div>
+      <div class="modal-body" id="modalMessage">Are you sure you want to proceed?</div>
+      <div class="modal-actions">
+        <button class="btn btn-cancel" id="cancelBtn">Cancel</button>
+        <button class="btn btn-confirm" id="confirmBtn">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    // Mobile menu toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuIcon = document.querySelector('.menu-icon');
+      const sidebar = document.querySelector('.sidebar');
+      
+      if (menuIcon && sidebar) {
+        menuIcon.addEventListener('click', function() {
+          sidebar.classList.toggle('open');
+        });
+      }
+
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener('click', function(event) {
+        if (window.innerWidth <= 768) {
+          if (!sidebar.contains(event.target) && !menuIcon.contains(event.target)) {
+            sidebar.classList.remove('open');
+          }
+        }
+      });
+    });
+
+    // History management functionality
+      const selectAllCheckbox = document.getElementById('selectAll');
+      const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+      const markReadBtn = document.getElementById('markReadBtn');
+      const deleteBtn = document.getElementById('deleteBtn');
+      const confirmModal = document.getElementById('confirmModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalMessage = document.getElementById('modalMessage');
+      const cancelBtn = document.getElementById('cancelBtn');
+      const confirmBtn = document.getElementById('confirmBtn');
+
+      let currentAction = null;
+      let selectedRows = [];
+
+      // Select All functionality
+      selectAllCheckbox.addEventListener('change', function() {
+        const isChecked = this.checked;
+        rowCheckboxes.forEach(checkbox => {
+          checkbox.checked = isChecked;
+          updateRowSelection(checkbox);
+        });
+        updateButtonStates();
+      });
+
+      // Individual row selection
+      rowCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          updateRowSelection(this);
+          updateSelectAllState();
+          updateButtonStates();
+        });
+      });
+
+      // Update row visual selection
+      function updateRowSelection(checkbox) {
+        const row = checkbox.closest('.row');
+        if (checkbox.checked) {
+          row.classList.add('selected');
+        } else {
+          row.classList.remove('selected');
+        }
+      }
+
+      // Update select all checkbox state
+      function updateSelectAllState() {
+        const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+        const totalBoxes = rowCheckboxes.length;
+        
+        if (checkedBoxes.length === 0) {
+          selectAllCheckbox.indeterminate = false;
+          selectAllCheckbox.checked = false;
+        } else if (checkedBoxes.length === totalBoxes) {
+          selectAllCheckbox.indeterminate = false;
+          selectAllCheckbox.checked = true;
+        } else {
+          selectAllCheckbox.indeterminate = true;
+        }
+      }
+
+      // Update button states based on selection
+      function updateButtonStates() {
+        const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+        const hasSelection = checkedBoxes.length > 0;
+        
+        markReadBtn.disabled = !hasSelection;
+        deleteBtn.disabled = !hasSelection;
+        
+        // Visual feedback for disabled buttons
+        if (hasSelection) {
+          markReadBtn.style.opacity = '1';
+          deleteBtn.style.opacity = '1';
+          markReadBtn.style.cursor = 'pointer';
+          deleteBtn.style.cursor = 'pointer';
+        } else {
+          markReadBtn.style.opacity = '0.5';
+          deleteBtn.style.opacity = '0.5';
+          markReadBtn.style.cursor = 'not-allowed';
+          deleteBtn.style.cursor = 'not-allowed';
+        }
+      }
+
+      // Mark as Read functionality
+      markReadBtn.addEventListener('click', function() {
+        if (this.disabled) return;
+        
+        const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+        selectedRows = Array.from(checkedBoxes).map(cb => cb.closest('.row'));
+        
+        const unreadCount = selectedRows.filter(row => row.classList.contains('unread')).length;
+        
+        if (unreadCount === 0) {
+          showNotification('No unread items selected', 'info');
+          return;
+        }
+        
+        currentAction = 'markRead';
+        modalTitle.textContent = 'Mark as Read';
+        modalMessage.textContent = `Are you sure you want to mark ${unreadCount} item(s) as read?`;
+        showModal();
+      });
+
+      // Delete functionality
+      deleteBtn.addEventListener('click', function() {
+        if (this.disabled) return;
+        
+        const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+        selectedRows = Array.from(checkedBoxes).map(cb => cb.closest('.row'));
+        
+        currentAction = 'delete';
+        modalTitle.textContent = 'Delete Items';
+        modalMessage.textContent = `Are you sure you want to delete ${selectedRows.length} item(s)? This action cannot be undone.`;
+        showModal();
+      });
+
+      // Modal functionality
+      function showModal() {
+        confirmModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function hideModal() {
+        confirmModal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+        currentAction = null;
+        selectedRows = [];
+      }
+
+      // Cancel button
+      cancelBtn.addEventListener('click', hideModal);
+
+      // Click outside modal to close
+      confirmModal.addEventListener('click', function(e) {
+        if (e.target === confirmModal) {
+          hideModal();
+        }
+      });
+
+      // Confirm button
+      confirmBtn.addEventListener('click', function() {
+        if (currentAction === 'markRead') {
+          executeMarkAsRead();
+        } else if (currentAction === 'delete') {
+          executeDelete();
+        }
+        hideModal();
+      });
+
+      // Execute mark as read
+      function executeMarkAsRead() {
+        selectedRows.forEach(row => {
+          if (row.classList.contains('unread')) {
+            row.classList.remove('unread');
+            const checkbox = row.querySelector('.row-checkbox');
+            checkbox.checked = false;
+            row.classList.remove('selected');
+          }
+        });
+        
+        // Reset select all checkbox
+        selectAllCheckbox.checked = false;
+        selectAllCheckbox.indeterminate = false;
+        updateButtonStates();
+        
+        showNotification('Items marked as read successfully', 'success');
+      }
+
+      // Execute delete
+      function executeDelete() {
+        selectedRows.forEach(row => {
+          row.style.animation = 'fadeOut 0.3s ease-out';
+          setTimeout(() => {
+            row.remove();
+          }, 300);
+        });
+        
+        // Reset select all checkbox
+        setTimeout(() => {
+          selectAllCheckbox.checked = false;
+          selectAllCheckbox.indeterminate = false;
+          updateButtonStates();
+        }, 350);
+        
+        showNotification('Items deleted successfully', 'success');
+      }
+
+      // Notification system
+      function showNotification(message, type = 'info') {
+        // Remove existing notifications
+        const existingNotification = document.querySelector('.notification');
+        if (existingNotification) {
+          existingNotification.remove();
+        }
+
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          padding: 15px 20px;
+          border-radius: 5px;
+          color: white;
+          font-weight: 500;
+          z-index: 1001;
+          transform: translateX(100%);
+          transition: transform 0.3s ease;
+          max-width: 300px;
+        `;
+        
+        // Set background color based on type
+        switch(type) {
+          case 'success':
+            notification.style.backgroundColor = '#28a745';
+            break;
+          case 'error':
+            notification.style.backgroundColor = '#dc3545';
+            break;
+          case 'info':
+            notification.style.backgroundColor = '#17a2b8';
+            break;
+          default:
+            notification.style.backgroundColor = '#6c757d';
+        }
+        
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        // Slide in
+        setTimeout(() => {
+          notification.style.transform = 'translateX(0)';
+        }, 100);
+        
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+          notification.style.transform = 'translateX(100%)';
+          setTimeout(() => {
+            if (notification.parentNode) {
+              notification.remove();
+            }
+          }, 300);
+        }, 3000);
+      }
+
+      // Initialize button states
+      updateButtonStates();
+
+      // Add CSS for fade out animation
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes fadeOut {
+          from { opacity: 1; transform: translateX(0); }
+          to { opacity: 0; transform: translateX(-100%); }
+        }
+      `;
+      document.head.appendChild(style);
+    
+  </script>
 </body>
 </html>

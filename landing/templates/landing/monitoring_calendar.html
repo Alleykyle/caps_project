@@ -1,776 +1,1075 @@
 {% load static %}
 
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Report Monitoring Calendar</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <style>
-    :root {
-      --primary-color: #2F3A7E;
-      --secondary-color: #c7ab44;
-      --success-color: #2ecc71;
-      --danger-color: #E92323;
-      --light-color: #f8f9fa;
-      --dark-color: #212529;
-      --border-radius: 8px;
-    }
-    
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      overflow: hidden;
-      background-color: #f0f4f8;
-      color: #333;
-    }
-    
-    .center-heading {
-      text-align: center;
-      margin: 20px auto;
-    }
-    
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: linear-gradient(135deg, var(--primary-color), #003366);
-      padding: 10px 20px;
-      border-bottom: 2px solid var(--secondary-color);
-      color: white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .dilg-logo,
-    .Smartfilex_logo {
-      height: 60px;  
-    }
-    
-    .header-left {
-      display: flex;
-      align-items: center;
-    }
-    
-    .header-center {
-      flex: 1;
-      text-align: center;
-    }
-    
-    .header-center h4 {
-      margin: 0;
-      font-weight: bold;
-      color: white;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    }
-    
-    .sidebar {
-      position: fixed;
-      top: 82px;
-      left: 0;
-      width: 180px;
-      height: calc(100vh - 82px);
-      background: linear-gradient(180deg, var(--primary-color), #003366);
-      overflow-y: auto;
-      border-right: 1px solid var(--secondary-color);
-      padding-top: 10px;
-      z-index: 100;
-    }
-    
-    .barangay-item {
-      background-color: rgba(255, 255, 255, 0.1);
-      padding: 12px 16px;
-      margin: 8px;
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 500;
-      color: white;
-      border-left: 5px solid transparent;
-    }
-    
-    .barangay-item:hover {
-      background: var(--secondary-color);
-      transform: translateX(5px);
-    }
-    
-    .barangay-item.active {
-      background-color: var(--secondary-color);
-      color: white;
-      border-left: 5px solid #ffffff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    
-    .main {
-      margin-left: 180px;
-      margin-top: 22px;
-      padding: 20px;
-      height: calc(100vh - 82px);
-      overflow-y: auto;
-      background: #f0f4f8;
-      background-image: linear-gradient(120deg, #e0f7fa 0%, #f9fbe7 100%);
-    }
-    
-    .tab-buttons .btn {
-      margin-right: 5px;
-    }   
-    
-    .task-panel {
-      background: #ffffff; 
-      padding: 20px;
-      border-radius: var(--border-radius);
-      margin-top: 1px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-      transition: background-color 0.3s ease;
-      border-top: 5px solid var(--primary-color);
-    }
-    
-    .task-panel h5 {
-      margin-bottom: 10px;   
-    }
-    
-    .task-list {
-      background: rgba(255, 255, 255, 0.7);
-      border-radius: var(--border-radius);
-      padding: 15px;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-    }
-    
-    .task-list div {
-      margin-bottom: 10px;  
-      display: flex;
-      align-items: center;
-      font-size: 15px;
-    }
-    
-    .task-list .select-all {
-      margin-bottom: 15px;
-      font-weight: bold;
-      padding-bottom: 8px;
-      border-bottom: 1px dashed #ccc;
-    }
-    
-    .status-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      font-size: 14px;
-      color: #555;
-      margin-top: 15px;
-      background: rgba(255,255,255,0.5);
-      padding: 10px;
-      border-radius: var(--border-radius);
-    }
-    
-    .left-status {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    <meta charset="UTF-8">
+    <title>Report Monitoring Calendar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        :root {
+            --primary-color: #2F3A7E;
+            --secondary-color: #c7ab44;
+            --success-color: #2ecc71;
+            --danger-color: #E92323;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --border-radius: 8px;
+        }
 
-    .right-status {
-      text-align: right;
-    }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background-color: #f0f4f8;
+            color: #333;
+        }
 
-    .edit-icon {
-      font-style: normal;
-      font-size: 12px;
-      cursor: pointer;
-      margin-left: 4px;
-      color: var(--primary-color);
-    }
+        .center-heading {
+            text-align: center;
+            margin: 20px auto;
+        }
 
-    .status-row span {
-      font-style: italic;
-    }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, var(--primary-color), #003366);
+            padding: 10px 20px;
+            border-bottom: 2px solid var(--secondary-color);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
 
-    .form-select.w-auto {
-      margin-top: 10px;
-    }
+        .dilg-logo,
+        .Smartfilex_logo {
+            height: 60px;
+        }
 
-    .home-icon {
-      font-size: 5px;
-      cursor: pointer;
-      background: rgba(255,255,255,0.2);
-      padding: 8px;
-      border-radius: 50%;
-      transition: all 0.3s ease;
-    }
-    
-    .home-icon:hover {
-      background: rgba(255,255,255,0.4);
-      transform: scale(1.2);
-    }
-  
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 10px 15px;
-      margin-left: 200px;
-      padding: 10px 15px;
-      background: linear-gradient(to right, var(--primary-color), #3949ab);
-      border-radius: var(--border-radius);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
 
-    .filters button {
-      margin-right: 8px;
-      padding: 8px 15px;
-      font-size: 0.9rem;
-      border-radius: var(--border-radius);
-      border: none;
-      background-color: rgba(255,255,255,0.2);
-      color: white;
-      transition: all 0.3s ease;
-    }
-    
-    .filter-select{
-      margin-right: 5px;
-      padding: 8px 12px;
-      font-size: 1rem;
-      border-radius: var(--border-radius);
-      background-color: white;
-      border: 2px solid var(--secondary-color);
-    }
-    
-    .filter-select:hover{
-      background-color: var(--secondary-color);
-      color: white;
-      cursor: pointer;
-    }
+        .header-center {
+            flex: 1;
+            text-align: center;
+        }
 
-    .search-box input {
-      height: 38px;
-      padding: 6px 15px 6px 35px;
-      font-size: 14px;
-      border: none;
-      border-radius: var(--border-radius);
-      transition: all 0.3s ease;
-      width: 200px;
-      background: white url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>') no-repeat 10px center;
-    }
-    
-    .search-box input:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px var(--secondary-color);
-      width: 250px;
-    }
-    
-    .filters button:hover{
-      background-color: var(--secondary-color);
-      color: white;
-      transform: translateY(-2px);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-    
-    .filters button.active {
-      background-color: var(--secondary-color);
-      color: white;
-      box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
-    }
+        .header-center h4 {
+            margin: 0;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
 
-    /* Custom checkboxes */
-    input[type="checkbox"] {
-      appearance: none;
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      border: 2px solid var(--primary-color);
-      border-radius: 3px;
-      margin-right: 10px;
-      position: relative;
-      cursor: pointer;
-      vertical-align: middle;
-    }
+        .sidebar {
+            position: fixed;
+            top: 82px;
+            left: 0;
+            width: 180px;
+            height: calc(100vh - 82px);
+            background: linear-gradient(180deg, var(--primary-color), #003366);
+            overflow-y: auto;
+            border-right: 1px solid var(--secondary-color);
+            padding-top: 10px;
+            z-index: 100;
+        }
 
-    input[type="checkbox"]:checked {
-      background-color: var(--primary-color);
-    }
+        .barangay-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 12px 16px;
+            margin: 8px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: white;
+            border-left: 5px solid transparent;
+        }
 
-    input[type="checkbox"]:checked:after {
-      content: '';
-      position: absolute;
-      width: 5px;
-      height: 10px;
-      border: solid white;
-      border-width: 0 2px 2px 0;
-      top: 1px;
-      left: 5px;
-      transform: rotate(45deg);
-    }
+        .barangay-item:hover {
+            background: var(--secondary-color);
+            transform: translateX(5px);
+        }
 
-    /* Status colors for task panel */
-    .task-panel.pending {
-      background-color: rgba(47, 58, 126, 0.15);
-      border-left: 5px solid var(--primary-color);
-    }
+        .barangay-item.active {
+            background-color: var(--secondary-color);
+            color: white;
+            border-left: 5px solid #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
 
-    .task-panel.accomplished {
-      background-color: rgba(46, 204, 113, 0.15);
-      border-left: 5px solid var(--success-color);
-    }
+        .main {
+            margin-left: 180px;
+            margin-top: 22px;
+            padding: 20px;
+            height: calc(100vh - 82px);
+            overflow-y: auto;
+            background: #f0f4f8;
+            background-image: linear-gradient(120deg, #e0f7fa 0%, #f9fbe7 100%);
+        }
 
-    .task-panel.not-accomplished {
-      background-color: rgba(233, 35, 35, 0.15);
-      border-left: 5px solid var(--danger-color);
-    }
+        .tab-buttons .btn {
+            margin-right: 5px;
+        }
 
-    /* Custom select styling */
-    select {
-      appearance: none;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="6"><path d="M0 0l6 6 6-6z" fill="%23888"/></svg>');
-      background-repeat: no-repeat;
-      background-position: right 10px center;
-      padding-right: 30px !important;
-    }
+        .task-panel {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-top: 1px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: background-color 0.3s ease;
+            border-top: 5px solid var(--primary-color);
+        }
 
-    .status-select {
-      padding: 8px 12px;
-      border-radius: var(--border-radius);
-      border: 1px solid #ddd;
-      font-weight: 500;
-      color: white;
-      margin-top: 5px;
-    }
+        .task-panel h5 {
+            margin-bottom: 10px;
+        }
 
-    .status-update-message {
-      margin-top: 10px;
-      padding: 8px;
-      text-align: center;
-      border-radius: var(--border-radius);
-      background-color: rgba(46, 204, 113, 0.2);
-      border-left: 4px solid var(--success-color);
-    }
+        .task-list {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
 
-    /* Animation for status message */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+        .task-list div {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+        }
 
-    .status-update-message {
-      animation: fadeIn 0.3s ease-out forwards;
-    }
+        .task-list .select-all {
+            margin-bottom: 15px;
+            font-weight: bold;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #ccc;
+        }
 
-    /* Added styles for hiding content initially */
-    .barangay-content {
-      display: none;
-    }
-    
-    .barangay-content.active {
-      display: block;
-      animation: fadeIn 0.3s ease-out forwards;
-    }
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-size: 14px;
+            color: #555;
+            margin-top: 15px;
+            background: rgba(255,255,255,0.5);
+            padding: 10px;
+            border-radius: var(--border-radius);
+        }
 
-    /* Loader styling */
-    #loader-wrapper {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255,255,255,0.9);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
+        .left-status {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
-    .loader {
-      border: 5px solid #f3f3f3;
-      border-top: 5px solid var(--primary-color);
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 1s linear infinite;
-    }
+        .right-status {
+            text-align: right;
+        }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+        .edit-icon {
+            font-style: normal;
+            font-size: 12px;
+            cursor: pointer;
+            margin-left: 4px;
+            color: var(--primary-color);
+        }
 
-    /* Add some depth to date inputs */
-    input[type="date"] {
-      padding: 4px 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      background-color: white;
-    }
+        .status-row span {
+            font-style: italic;
+        }
 
-    /* Center heading animations */
-    .center-heading h4 {
-      position: relative;
-      display: inline-block;
-    }
+        .form-select.w-auto {
+            margin-top: 10px;
+        }
 
-    .center-heading h4:after {
-      content: '';
-      position: absolute;
-      width: 50%;
-      height: 2px;
-      bottom: -5px;
-      left: 25%;
-      background-color: var(--secondary-color);
-      transition: width 0.3s ease;
-    }
+        .home-icon {
+            font-size: 5px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.2);
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
 
-    .center-heading:hover h4:after {
-      width: 100%;
-      left: 0;
-    }
-    .help-tip {
-    padding: 15px;
-    background-color: #fff9e6;
-    border-left: 6px solid #ffc107;
-    border-radius: 8px;
-    font-size: 0.95rem;
-}
-.help-tip h5 {
-    margin-bottom: 10px;
-}
-@media (max-height: 700px) {
-    .summary-panel,
-    .barangay-info,
-    .help-tip {
-        display: none;
-    }
-}
-  </style>
+        .home-icon:hover {
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.2);
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 15px;
+            margin-left: 200px;
+            padding: 10px 15px;
+            background: linear-gradient(to right, var(--primary-color), #3949ab);
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .filters button {
+            margin-right: 8px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            border-radius: var(--border-radius);
+            border: none;
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .filter-select{
+            margin-right: 5px;
+            padding: 8px 12px;
+            font-size: 1rem;
+            border-radius: var(--border-radius);
+            background-color: white;
+            border: 2px solid var(--secondary-color);
+        }
+
+        .filter-select:hover{
+            background-color: var(--secondary-color);
+            color: white;
+            cursor: pointer;
+        }
+
+        .search-box input {
+            height: 38px;
+            padding: 6px 15px 6px 35px;
+            font-size: 14px;
+            border: none;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+            width: 200px;
+            background: white url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>') no-repeat 10px center;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--secondary-color);
+            width: 250px;
+        }
+
+        .filters button:hover{
+            background-color: var(--secondary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .filters button.active {
+            background-color: var(--secondary-color);
+            color: white;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Custom checkboxes */
+        input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--primary-color);
+            border-radius: 3px;
+            margin-right: 10px;
+            position: relative;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+
+        input[type="checkbox"]:checked {
+            background-color: var(--primary-color);
+        }
+
+        input[type="checkbox"]:checked:after {
+            content: '';
+            position: absolute;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            top: 1px;
+            left: 5px;
+            transform: rotate(45deg);
+        }
+
+        /* Status colors for task panel */
+        .task-panel.pending {
+            background-color: rgba(47, 58, 126, 0.15);
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .task-panel.accomplished {
+            background-color: rgba(46, 204, 113, 0.15);
+            border-left: 5px solid var(--success-color);
+        }
+
+        .task-panel.not-accomplished {
+            background-color: rgba(233, 35, 35, 0.15);
+            border-left: 5px solid var(--danger-color);
+        }
+
+        /* NEW: Due date alert styles */
+        .task-panel.due-soon {
+            background-color: rgba(255, 255, 0, 0.15); /* Light yellow */
+            border-left: 5px solid #FFD700; /* Gold */
+        }
+
+        .task-panel.past-due {
+            background-color: rgba(255, 0, 0, 0.15); /* Light red */
+            border-left: 5px solid #FF0000; /* Red */
+        }
+
+        .due-date-alert-message {
+            font-weight: bold;
+            margin-top: 5px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            display: inline-block; /* To make background fit content */
+        }
+
+        .due-date-alert-message.warning {
+            color: #DAA520; /* Darker yellow/gold for text */
+            background-color: #FFFACD; /* Lemon chiffon background */
+            border: 1px solid #FFD700;
+        }
+
+        .due-date-alert-message.alert {
+            color: #8B0000; /* Dark red for text */
+            background-color: #FFC0CB; /* Light pink background */
+            border: 1px solid #FF6347;
+        }
+
+        /* Custom select styling */
+        select {
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="6"><path d="M0 0l6 6 6-6z" fill="%23888"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 30px !important;
+        }
+
+        .status-select {
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+            font-weight: 500;
+            color: white;
+            margin-top: 5px;
+        }
+
+        .status-update-message {
+            display: none;
+            font-weight: bold;
+            margin-top: 8px;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+        }
+        .status-success {
+            color: #2ecc71; /* Green */
+        }
+        .status-warning {
+            color: #2F3A7E; /* Blue or your preferred pending color */
+        }
+        .status-error {
+            color: #E92323; /* Red */
+        }
+        .report-container {
+            background: #f6f8fa;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 8px #0001;
+            max-width: 400px;
+            margin: 32px auto;
+        }
+
+        /* Animation for status message */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .status-update-message {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        /* Added styles for hiding content initially */
+        .barangay-content {
+            display: none; /* All barangay content starts hidden */
+        }
+
+        .barangay-content.active {
+            display: block; /* Only active barangay content is shown */
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        /* Loader styling */
+        #loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Add some depth to date inputs */
+        input[type="date"] {
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+        }
+
+        /* Center heading animations */
+        .center-heading h4 {
+            position: relative;
+            display: inline-block;
+        }
+
+        .center-heading h4:after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            bottom: -5px;
+            left: 25%;
+            background-color: var(--secondary-color);
+            transition: width 0.3s ease;
+        }
+
+        .center-heading:hover h4:after {
+            width: 100%;
+            left: 0;
+        }
+        .help-tip-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .help-tip {
+            padding: 15px;
+            background-color: #fff9e6;
+            border-left: 6px solid #ffc107;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            max-width: 80%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .help-tip h5 {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .help-tip h5::before {
+            content: "💡";
+            margin-right: 8px;
+        }
+
+
+        @media (max-height: 700px) {
+            .summary-panel,
+            .barangay-info,
+            .help-tip {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
 
 <header>
-  <div class="header-left">
-    <img src="{% static 'images/DILG-Logo.png' %}" class="dilg-logo" alt="dilg-logo">
-    <img src="{% static 'images/Smartfilex.png' %}" class="Smartfilex_logo" alt="Smartfilex_logo">
-    <span style="margin-left: 10px; font-weight: bold; color: white;">SMARTFILEX</span>
-  </div>
-  <div class="header-center">
-    <h4>Requirements Monitoring</h4>
-  </div>
-  <div class="home-icon">
-    <a href="{% url 'landing:landing_page' %}">
-        <img src="{% static 'images/home.png' %}" alt="Home" style="width: 24px; height: 24px; cursor: pointer;" />
-    </a>
-</div>
+    <div class="header-left">
+        <img src="{% static 'images/DILG-Logo.png' %}" class="dilg-logo" alt="dilg-logo">
+        <span style="margin-left: 10px; font-weight: bold; color: white;">SMARTFILEX</span>
+    </div>
+    <div class="header-center">
+        <h4>Requirements Monitoring</h4>
+    </div>
+    <div class="home-icon">
+        <a href="{% url 'landing:landing_page' %}">
+            <img src="{% static 'images/home.png' %}" alt="Home" style="width: 24px; height: 24px; cursor: pointer;" />
+        </a>
+    </div>
 </header>
 
 <div class="sidebar" id="barangay-sidebar">
-  <!-- Barangay items will be generated dynamically -->
 </div>
 
 <div class="top-bar">
-  <div class="filters">
-    <button class="active">Weekly</button>
-    <button>Monthly</button>
-    <button>Semestral</button>
-    <button>Quarterly</button>
-    <button>Annually</button>
-  </div>
-  <div class="search-box">
-    <input type="text" placeholder="Search..." />
-  </div>
+    <div class="filters">
+        <button id="weeklyBtn" class="active">Weekly</button>
+        <button id="monthlyBtn">Monthly</button>
+        <button id="semestralBtn">Semestral</button>
+        <button id="quarterlyBtn">Quarterly</button>
+        <button id="annuallyBtn">Annually</button>
+    </div>
+    <div class="search-box">
+        <input type="text" placeholder="Search..." />
+    </div>
 </div>
 
-<div class="main" id="barangay-content-container">
-  <!-- Barangay content will be generated dynamically -->
-<div class="help-tip mt-4">
-    <h5>💡 Tip</h5>
-    <p>Use the 'Select All' checkbox to quickly mark all tasks at once.</p>
-</div>
+<div class="main" id="weeklyView">
+    <div class="help-tip mt-4">
+        <h5>Tip</h5>
+        <p>Use the 'Select All' checkbox to quickly mark all tasks at once.</p>
+    </div>
 </div>
 
+<div class="main" id="monthlyView" style="display:none;">
+    <div class="help-tip mt-4">
+        <h5>Tip</h5>
+        <p>Use the 'Select All' checkbox to quickly mark all reports at once.</p>
+    </div>
+</div>
+
+<div id="semestralView" style="display:none;">
+</div>
+<div id="quarterlyView" style="display:none;">
+</div>
+<div id="annuallyView" style="display:none;">
+</div>
 
 <div id="loader-wrapper">
-  <div class="loader"></div>
+    <div class="loader"></div>
 </div>
 
-
-
-
-
 <script>
-  // Database-like information for each barangay
-  const barangayData = [
-    {
-      id: 1,
-      name: "BARANGAY 1",
-      tasks: ["Barangay Assembly Meeting", "Weekly Cleanup Drive", "Health and Wellness Program", "Waste Management Training"],
-      status: "pending",
-      dueDate: "2025-05-20",
-      lastUpdated: "May 5, 2025"
-    },
-    {
-      id: 2,
-      name: "BARANGAY 2",
-      tasks: ["Community Garden Initiative", "Neighborhood Watch Program", "Youth Development Seminar", "Senior Citizens Health Check"],
-      status: "accomplished",
-      dueDate: "2025-05-15",
-      lastUpdated: "May 3, 2025"
-    },
-    {
-      id: 3,
-      name: "BARANGAY 3",
-      tasks: ["Barangay Road Clean up Operation (BARCO)", "Weekly Cleanup Drive", "Community Meeting", "Health Program Implementation"],
-      status: "pending",
-      dueDate: "2025-05-22",
-      lastUpdated: "May 5, 2025"
-    },
-    {
-      id: 4,
-      name: "BARANGAY 4",
-      tasks: ["Barangay Road Clean up Operation (BARCO)", "Weekly Cleanup Drive", "Community Meeting", "Health Program Implementation"],
-      status: "not-accomplished",
-      dueDate: "2025-05-18",
-      lastUpdated: "May 5, 2025"
-    },
-    {
-      id: 5,
-      name: "BARANGAY 5",
-      tasks: ["Barangay Road Clean up Operation (BARCO)", "Weekly Cleanup Drive", "Community Meeting", "Health Program Implementation"],
-      status: "accomplished",
-      dueDate: "2025-05-20",
-      lastUpdated: "May 4, 2025"
-    },
-    {
-      id: 6,
-      name: "BARANGAY 6",
-      tasks: ["Barangay Road Clean up Operation (BARCO)", "Weekly Cleanup Drive", "Community Meeting", "Health Program Implementation"],
-      status: "pending",
-      dueDate: "2025-05-20",
-      lastUpdated: "May 5, 2025"
-    },
-    {
-      id: 7,
-      name: "BARANGAY 7",
-      tasks: ["Barangay Road Clean up Operation (BARCO)", "Weekly Cleanup Drive", "Community Meeting", "Health Program Implementation"],
-      status: "accomplished",
-      dueDate: "2025-05-19",
-      lastUpdated: "May 5, 2025"
-    },
-    {
-      id: 8,
-      name: "BARANGAY 8",
-      tasks: ["Barangay Road Clean up Operation (BARCO)", "Weekly Cleanup Drive", "Community Meeting", "Health Program Implementation"],
-      status: "not-accomplished",
-      dueDate: "2025-05-17",
-      lastUpdated: "May 5, 2025"
-    }
-  ];
-
-  // Generate data for the remaining barangays (9-33)
-  for (let i = 9; i <= 33; i++) {
-    const statusOptions = ["pending", "accomplished", "not-accomplished"];
-    const randomStatus = statusOptions[Math.floor(Math.random() * statusOptions.length)];
-    
-    barangayData.push({
-      id: i,
-      name: `BARANGAY ${i}`,
-      tasks: ["Barangay Road Clean up Operation (BARCO)", "Weekly Cleanup Drive", "Community Meeting", "Health Program Implementation"],
-      status: randomStatus,
-      dueDate: "2025-05-20",
-      lastUpdated: "May 5, 2025"
-    });
-  }
-
-  // Load content when page is fully loaded
-  window.addEventListener("load", function () {
-    document.getElementById("loader-wrapper").style.display = "none";
-    generateBarangaySidebar();
-    generateBarangayContent();
-    setupEventListeners();
-    
-    // Set Barangay 1 as active initially
-    document.querySelector('.barangay-item').click();
-  });
-
-  // Function to generate the sidebar with all barangay items
-  function generateBarangaySidebar() {
-    const sidebar = document.getElementById("barangay-sidebar");
-    
-    barangayData.forEach((barangay, index) => {
-      const barangayItem = document.createElement("div");
-      barangayItem.className = "barangay-item" + (index === 0 ? " active" : "");
-      barangayItem.setAttribute("data-brgy", barangay.id);
-      barangayItem.textContent = barangay.name;
-      sidebar.appendChild(barangayItem);
-    });
-  }
-
-  // Function to generate content for all barangays
-  function generateBarangayContent() {
-    const container = document.getElementById("barangay-content-container");
-    
-    barangayData.forEach((barangay, index) => {
-      const content = document.createElement("div");
-      content.id = `barangay-${barangay.id}`;
-      content.className = "barangay-content" + (index === 0 ? " active" : "");
-      
-      content.innerHTML = `
-        <div class="task-panel ${barangay.status}">
-          <select class="filter-select">
-            <option>Week 25</option>
-            <option>Week 24</option>
-            <option>Week 23</option>
-          </select>
-          <div class="center-heading">
-            <h4>${barangay.name}</h4>
-            <div class="text-muted">May 5, 2025</div>
-          </div>
-
-          <div class="task-list mt-3">
-            <div class="select-all">
-              <input type="checkbox" id="select-all-${barangay.id}" onclick="toggleAllTasks('${barangay.id}')"> Select All Tasks
-            </div>
-            ${generateTaskItems(barangay)}
-          
-            <div class="dropdown-select mt-3">
-              <label for="status-select-${barangay.id}">Status</label>
-              <select id="status-${barangay.id}" class="status-select" onchange="updateStatus(this)" style="width: 100%; padding: 0.5em;">
-                ${generateStatusOptions(barangay.status)}
-              </select>                
-            </div>
-          
-            <div class="status-row mt-3">
-              <div class="left-status">
-                <span>Status: ${capitalizeFirstLetter(barangay.status)} <i class="edit-icon">✎</i></span>
-                <span>Due Date: <input type="date" value="${barangay.dueDate}"> <i class="edit-icon">✎</i></span>
-              </div>
-              <div class="right-status">
-                <span>Last Updated: ${barangay.lastUpdated} <i class="edit-icon">✎</i></span>
-              </div>
-            </div>
-            <div class="status-update-message" style="display:none; color: green;">Status updated successfully!</div>
-          </div>          
-        </div>
-      `;
-      
-      container.appendChild(content);
-    });
-  }
-
-  // Helper function to generate task items for a barangay
-  function generateTaskItems(barangay) {
-    return barangay.tasks.map(task => 
-      `<div><input type="checkbox" class="task task-${barangay.id}"> ${task}</div>`
-    ).join('');
-  }
-
-  // Helper function to generate status options with the current status selected
-  function generateStatusOptions(currentStatus) {
-    const statuses = [
-      { value: "pending", color: "#2F3A7E", label: "Pending" },
-      { value: "accomplished", color: "#2ecc71", label: "Accomplished" },
-      { value: "not-accomplished", color: "#E92323", label: "Not Accomplished" }
+    // Database-like information for each barangay
+    const barangayNames = [
+        "Barangay I", "Barangay II", "Barangay III", "Barangay IV", "Barangay V",
+        "Barangay VI", "Barangay VII", "Barangay VIII", "Barangay IX", "Barangay X",
+        "Barangay XI", "Barra", "Bocohan", "Cotta", "Dalahican", "Domoit",
+        "Gulang - Gulang", "Ibabang Dupay", "Ibabang Iyam", "Ibabang Talim",
+        "Ilayang Dupay", "Ilayang Iyam", "Ilayang Talim", "Isabang", "Marketview",
+        "Mayao Castillo", "Mayao Crossing", "Mayao Kanluran", "Mayao Parada",
+        "Mayao Silangan", "Ransohan", "Salinas", "Talao - Talao"
     ];
-    
-    return statuses.map(status => 
-      `<option value="${status.value}" ${currentStatus === status.value ? 'selected' : ''}>${status.label}</option>`
-    ).join('');
-  }
 
-  // Helper function to capitalize first letter of a string
-  function capitalizeFirstLetter(string) {
-    return string.replace(/-/g, ' ').split(' ').map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
-  }
+    const statusOptions = ["pending", "accomplished", "not-accomplished"];
 
-  // Function to set up event listeners for barangay navigation
-  function setupEventListeners() {
-    const barangayItems = document.querySelectorAll('.barangay-item');
-    
-    barangayItems.forEach(item => {
-      item.addEventListener('click', function() {
-        // Remove active class from all items
-        barangayItems.forEach(i => i.classList.remove('active'));
-        // Add active class to clicked item
-        this.classList.add('active');
-        
-        // Get the barangay number from data attribute
-        const brgyNumber = this.getAttribute('data-brgy');
-        
-        // Hide all barangay content
-        document.querySelectorAll('.barangay-content').forEach(content => {
-          content.classList.remove('active');
-        });
-        
-        // Show the selected barangay content
-        const targetContent = document.getElementById('barangay-' + brgyNumber);
-        if (targetContent) {
-          targetContent.classList.add('active');
-        } else {
-          console.log('Content for Barangay ' + brgyNumber + ' not found');
-        }
-      });
-    });
-    
-    // Set the initial background color for status
-    document.querySelectorAll('.status-select').forEach(select => {
-      updateSelectStyle(select);
-    });
-    
-    // Add event listeners for filter buttons
-    document.querySelectorAll('.filters button').forEach(button => {
-      button.addEventListener('click', function() {
-        // Remove active class from all filter buttons
-        document.querySelectorAll('.filters button').forEach(btn => {
-          btn.classList.remove('active');
-        });
-        // Add active class to clicked button
-        this.classList.add('active');
-      });
-    });
-  }
+    const barangayData = []; // For Weekly
+    const monthlyReportData = []; // For Monthly
 
-  // Function to update select element styling based on status
-  function updateSelectStyle(selectElement) {
-    const value = selectElement.value.toLowerCase();
-    
-    if (value === "not-accomplished") {
-      selectElement.style.backgroundColor = "#E92323";
-    } else if (value === "pending") {
-      selectElement.style.backgroundColor = "#2F3A7E";
-    } else if (value === "accomplished") {
-      selectElement.style.backgroundColor = "#2ecc71";
+    // Helper to format date as "Month Day, Year"
+    function formatDate(dateString) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString(undefined, options);
     }
-  }
 
-  // Function to handle status updates
-  function updateStatus(selectElement) {
-    const value = selectElement.value.toLowerCase();
-    const taskPanel = selectElement.closest('.task-panel');
-    
-    // Update select style
-    updateSelectStyle(selectElement);
-    
-    // Update task panel class
-    taskPanel.className = taskPanel.className.replace(/(pending|accomplished|not-accomplished)/g, '').trim();
-    taskPanel.classList.add(value);
+    // NEW: Helper function to get due date status
+    function getDueDateStatus(dueDateString) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Normalize today's date to midnight
 
-    // Update the status text
-    const statusText = selectElement.closest('.task-list').querySelector('.left-status span:first-child');
-    statusText.innerHTML = `Status: ${capitalizeFirstLetter(value)} <i class="edit-icon">✎</i>`;
+        const due = new Date(dueDateString);
+        due.setHours(0, 0, 0, 0); // Normalize due date to midnight
 
-    // Show success message when the status is updated
-    const statusMessage = selectElement.closest('.task-list').querySelector('.status-update-message');
-    statusMessage.style.display = 'block';
-    setTimeout(function(){
-      statusMessage.style.display = 'none';
-    }, 2000);
-  }
+        const timeDiff = due.getTime() - today.getTime();
+        const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Calculate days difference
 
-  // Toggle select all tasks for a specific barangay
-  function toggleAllTasks(brgyNumber) {
-    const isChecked = document.getElementById("select-all-" + brgyNumber).checked;
-    const tasks = document.querySelectorAll(".task-" + brgyNumber);
-    tasks.forEach(task => task.checked = isChecked);
-  }
+        if (daysDiff < 0) {
+            return { status: 'past-due', message: `Past Due by ${Math.abs(daysDiff)} day(s)`, messageClass: 'alert' };
+        } else if (daysDiff === 0) {
+            return { status: 'due-soon', message: 'Due Today!', messageClass: 'warning' };
+        } else if (daysDiff <= 7) { // 7 days warning threshold
+            return { status: 'due-soon', message: `Due in ${daysDiff} day(s)`, messageClass: 'warning' };
+        } else {
+            return { status: 'on-track', message: '', messageClass: '' }; // No specific alert needed
+        }
+    }
+
+
+    for (let i = 0; i < barangayNames.length; i++) {
+        const randomStatus = statusOptions[Math.floor(Math.random() * statusOptions.length)];
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedToday = `${year}-${month}-${day}`;
+
+        // Example: Set some due dates in the future and past for testing
+        let initialDueDate;
+        if (i % 3 === 0) { // Some past due
+            const pastDate = new Date();
+            pastDate.setDate(today.getDate() - 5); // 5 days ago
+            initialDueDate = `${pastDate.getFullYear()}-${String(pastDate.getMonth() + 1).padStart(2, '0')}-${String(pastDate.getDate()).padStart(2, '0')}`;
+        } else if (i % 3 === 1) { // Some due soon
+            const futureDate = new Date();
+            futureDate.setDate(today.getDate() + 3); // 3 days from now
+            initialDueDate = `${futureDate.getFullYear()}-${String(futureDate.getMonth() + 1).padStart(2, '0')}-${String(futureDate.getDate()).padStart(2, '0')}`;
+        } else { // Some far in the future
+            const farFutureDate = new Date();
+            farFutureDate.setDate(today.getDate() + 30); // 30 days from now
+            initialDueDate = `${farFutureDate.getFullYear()}-${String(farFutureDate.getMonth() + 1).padStart(2, '0')}-${String(farFutureDate.getDate()).padStart(2, '0')}`;
+        }
+
+
+        barangayData.push({
+            id: i + 1,
+            name: barangayNames[i],
+            tasks: [
+                "Barangay Road Clean up Operation (BARCO)",
+                "Weekly Cleanup Drive",
+                "Community Meeting",
+                "Health Program Implementation"
+            ],
+            status: randomStatus,
+            dueDate: initialDueDate, // Use dynamic initial due date
+            lastUpdated: formatDate(formattedToday) // Use formatted today's date
+        });
+
+        monthlyReportData.push({
+            id: i + 1,
+            name: barangayNames[i],
+            tasks: [
+                "BaRCO",
+                "ASF",
+                "Kasambahay",
+                "FTJAA"
+            ],
+            status: randomStatus,
+            dueDate: initialDueDate, // Use dynamic initial due date
+            lastUpdated: formatDate(formattedToday) // Use formatted today's date
+        });
+    }
+
+    console.log("Weekly Data:", barangayData);
+    console.log("Monthly Data:", monthlyReportData);
+
+    let currentActiveBarangayId = 1; // Default to Barangay I
+    let currentActiveView = 'weekly'; // Default to weekly
+
+    // Array of month names for display
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+
+    // Load content when page is fully loaded
+    window.addEventListener("load", function () {
+        document.getElementById("loader-wrapper").style.display = "none";
+        generateBarangaySidebar();
+        generateAllBarangayContents(); // Generate content for all views upfront
+        setupEventListeners();
+        attachDateChangeListeners();
+        attachMonthChangeListener(); // Call the new function to attach month change listeners
+
+        // Set Barangay 1 as active initially and show its weekly content
+        document.querySelector('.barangay-item[data-brgy="1"]').click();
+    });
+
+    // Function to generate the sidebar with all barangay items
+    function generateBarangaySidebar() {
+        const sidebar = document.getElementById("barangay-sidebar");
+
+        barangayData.forEach((barangay) => {
+            const barangayItem = document.createElement("div");
+            barangayItem.className = "barangay-item"; // No 'active' class here initially
+            barangayItem.setAttribute("data-brgy", barangay.id);
+            barangayItem.textContent = barangay.name;
+            sidebar.appendChild(barangayItem);
+        });
+    }
+
+    // Function to generate content for ALL barangays for ALL views
+    function generateAllBarangayContents() {
+        const weeklyContainer = document.getElementById("weeklyView");
+        const monthlyContainer = document.getElementById("monthlyView");
+
+        // Clear existing content to prevent duplicates on re-render (if you ever re-render)
+        weeklyContainer.innerHTML = `<div class="help-tip mt-4"><h5>Tip</h5><p>Use the 'Select All' checkbox to quickly mark all tasks at once.</p></div>`;
+        monthlyContainer.innerHTML = `<div class="help-tip mt-4"><h5>Tip</h5><p>Use the 'Select All' checkbox to quickly mark all reports at once.</p></div>`;
+
+
+        barangayData.forEach((barangay) => {
+            const weeklyDueDateStatus = getDueDateStatus(barangay.dueDate);
+            // Apply due date status class ONLY if the current status is 'pending'
+            const weeklyPanelClass = barangay.status === 'pending' ? `${barangay.status} ${weeklyDueDateStatus.status}` : barangay.status;
+
+            // Generate Weekly Content
+            const weeklyContent = document.createElement("div");
+            weeklyContent.id = `weekly-barangay-${barangay.id}`;
+            weeklyContent.className = "barangay-content"; // Start hidden
+            weeklyContent.innerHTML = `
+                <div class="task-panel ${weeklyPanelClass}">
+                    <select class="filter-select">
+                        <option>Week 25</option>
+                        <option>Week 24</option>
+                        <option>Week 23</option>
+                    </select>
+                    <div class="center-heading">
+                        <h4>${barangay.name}</h4>
+                        <div class="text-muted">May 5, 2025</div>
+                    </div>
+
+                    <div class="task-list mt-3">
+                        <div class="select-all">
+                            <input type="checkbox" id="select-all-weekly-${barangay.id}" onclick="toggleAllTasks('weekly', '${barangay.id}')"> Select All Tasks
+                        </div>
+                        ${generateTaskItems(barangay.tasks, 'weekly', barangay.id)}
+
+                        <div class="dropdown-select mt-3">
+                            <label for="status-select-weekly-${barangay.id}">Status</label>
+                            <select id="status-weekly-${barangay.id}" class="status-select" onchange="updateStatus(this, 'weekly', '${barangay.id}')" style="width: 100%; padding: 0.5em;">
+                                ${generateStatusOptions(barangay.status)}
+                            </select>
+                        </div>
+
+                        <div class="status-row mt-3">
+                            <div class="left-status">
+                                <span id="status-text-weekly-${barangay.id}">Status: ${capitalizeFirstLetter(barangay.status)} <i class="edit-icon">✎</i></span>
+                                <span>Due Date: <input type="date" value="${barangay.dueDate}" data-view-type="weekly" data-barangay-id="${barangay.id}" class="due-date-input"></span>
+                                ${weeklyDueDateStatus.message ? `<span class="due-date-alert-message ${weeklyDueDateStatus.messageClass}">${weeklyDueDateStatus.message}</span>` : ''}
+                            </div>
+                            <div class="right-status">
+                                <span id="last-updated-weekly-${barangay.id}">Last Updated: ${barangay.lastUpdated}</span>
+                            </div>
+                        </div>
+                        <div class="status-update-message" style="display:none;">Status updated successfully!</div>
+                    </div>
+                </div>
+            `;
+            weeklyContainer.appendChild(weeklyContent);
+        });
+
+        monthlyReportData.forEach((report) => {
+            const monthlyDueDateStatus = getDueDateStatus(report.dueDate);
+            const monthlyPanelClass = report.status === 'pending' ? `${report.status} ${monthlyDueDateStatus.status}` : report.status;
+
+            // Determine the initial month to display in the header (e.g., current month)
+            // For example, if you want the current month of the user's system to be default
+            const currentMonthIndex = new Date().getMonth(); // 0 for January, 1 for February, etc.
+            const initialDisplayedMonthName = monthNames[currentMonthIndex];
+            const initialDisplayedYear = new Date().getFullYear(); // Current year
+
+            // Generate Monthly Content
+            const monthlyContent = document.createElement("div");
+            monthlyContent.id = `monthly-barangay-${report.id}`;
+            monthlyContent.className = "barangay-content"; // Start hidden
+            monthlyContent.innerHTML = `
+                <div class="task-panel ${monthlyPanelClass}">
+                    <select class="filter-select monthly-month-select" data-barangay-id="${report.id}">
+                        ${monthNames.map((month, index) => `<option value="${index}" ${index === currentMonthIndex ? 'selected' : ''}>Month ${month}</option>`).join('')}
+                    </select>
+                    <div class="center-heading">
+                        <h4>${report.name}</h4>
+                        <div class="text-muted" id="monthly-date-display-${report.id}">${initialDisplayedMonthName} ${initialDisplayedYear}</div>
+                    </div>
+
+                    <div class="task-list mt-3">
+                        <div class="select-all">
+                            <input type="checkbox" id="select-all-monthly-${report.id}" onclick="toggleAllTasks('monthly', '${report.id}')"> Select All Reports
+                        </div>
+                        ${generateTaskItems(report.tasks, 'monthly', report.id)}
+
+                        <div class="dropdown-select mt-3">
+                            <label for="status-select-monthly-${report.id}">Status</label>
+                            <select id="status-monthly-${report.id}" class="status-select" onchange="updateStatus(this, 'monthly', '${report.id}')" style="width: 100%; padding: 0.5em;">
+                                ${generateStatusOptions(report.status)}
+                            </select>
+                        </div>
+
+                        <div class="status-row mt-3">
+                            <div class="left-status">
+                                <span id="status-text-monthly-${report.id}">Status: ${capitalizeFirstLetter(report.status)} <i class="edit-icon">✎</i></span>
+                                <span>Due Date: <input type="date" value="${report.dueDate}" data-view-type="monthly" data-barangay-id="${report.id}" class="due-date-input"></span>
+                                ${monthlyDueDateStatus.message ? `<span class="due-date-alert-message ${monthlyDueDateStatus.messageClass}">${monthlyDueDateStatus.message}</span>` : ''}
+                            </div>
+                            <div class="right-status">
+                                <span id="last-updated-monthly-${report.id}">Last Updated: ${report.lastUpdated}</span>
+                            </div>
+                        </div>
+                        <div class="status-update-message" style="display:none;">Status updated successfully!</div>
+                    </div>
+                </div>
+            `;
+            monthlyContainer.appendChild(monthlyContent);
+        });
+
+        // Initialize select styles
+        document.querySelectorAll('.status-select').forEach(select => {
+            updateSelectStyle(select);
+        });
+    }
+
+    // Helper function to generate task items for a barangay based on view type
+    function generateTaskItems(tasks, viewType, barangayId) {
+        return tasks.map(task =>
+            `<div><input type="checkbox" class="task ${viewType}-task task-${barangayId}"> ${task}</div>`
+        ).join('');
+    }
+
+    // Helper function to generate status options with the current status selected
+    function generateStatusOptions(currentStatus) {
+        const statuses = [
+            { value: "pending", color: "#2F3A7E", label: "Pending" },
+            { value: "accomplished", color: "#2ecc71", label: "Accomplished" },
+            { value: "not-accomplished", color: "#E92323", label: "Not Accomplished" }
+        ];
+
+        return statuses.map(status =>
+            `<option value="${status.value}" ${currentStatus === status.value ? 'selected' : ''}>${status.label}</option>`
+        ).join('');
+    }
+
+    // Helper function to capitalize first letter of a string
+    function capitalizeFirstLetter(string) {
+        return string.replace(/-/g, ' ').split(' ').map(word =>
+            word.charAt(0).toUpperCase() + word.slice(1)
+        ).join(' ');
+    }
+
+    // Function to set up event listeners for barangay navigation and filter buttons
+    function setupEventListeners() {
+        const barangayItems = document.querySelectorAll('.barangay-item');
+
+        barangayItems.forEach(item => {
+            item.addEventListener('click', function() {
+                barangayItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                currentActiveBarangayId = parseInt(this.getAttribute('data-brgy'));
+                showContentForActiveBarangayAndView();
+            });
+        });
+
+        document.querySelectorAll('.filters button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.filters button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+                currentActiveView = this.id.replace('Btn', '').toLowerCase();
+                showContentForActiveBarangayAndView();
+            });
+        });
+    }
+
+    // Function to show the correct barangay content based on currentActiveBarangayId and currentActiveView
+    function showContentForActiveBarangayAndView() {
+        // Hide all general view containers first
+        document.getElementById('weeklyView').style.display = 'none';
+        document.getElementById('monthlyView').style.display = 'none';
+        document.getElementById('semestralView').style.display = 'none';
+        document.getElementById('quarterlyView').style.display = 'none';
+        document.getElementById('annuallyView').style.display = 'none';
+
+        // Hide all specific barangay content divs
+        document.querySelectorAll('.barangay-content').forEach(contentDiv => {
+            contentDiv.classList.remove('active');
+        });
+
+        // Show the relevant general view container
+        const activeViewContainer = document.getElementById(`${currentActiveView}View`);
+        if (activeViewContainer) {
+            activeViewContainer.style.display = 'block';
+
+            // Show the specific barangay content within that view
+            const specificBarangayContent = document.getElementById(`${currentActiveView}-barangay-${currentActiveBarangayId}`);
+            if (specificBarangayContent) {
+                specificBarangayContent.classList.add('active');
+            }
+        }
+    }
+
+    // Placeholder functions (you'll need to implement their logic)
+    function toggleAllTasks(viewType, barangayId) {
+        const selectAllCheckbox = document.getElementById(`select-all-${viewType}-${barangayId}`);
+        const checkboxes = document.querySelectorAll(`.${viewType}-task.task-${barangayId}`);
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+        // Here you would add logic to update the task statuses in your data model
+        // and potentially trigger a status update for the barangay
+    }
+
+    function updateStatus(selectElement, viewType, barangayId) {
+        const newStatus = selectElement.value;
+        const statusTextSpan = document.getElementById(`status-text-${viewType}-${barangayId}`);
+        const taskPanel = selectElement.closest('.task-panel'); // Get the parent task panel
+
+        // Update the displayed status text
+        if (statusTextSpan) {
+            statusTextSpan.innerHTML = `Status: ${capitalizeFirstLetter(newStatus)} <i class="edit-icon">✎</i>`;
+        }
+
+        // Update the task panel's background and border based on new status
+        taskPanel.classList.remove('pending', 'accomplished', 'not-accomplished', 'due-soon', 'past-due');
+        taskPanel.classList.add(newStatus);
+
+        // If status becomes "pending", re-evaluate and apply due date alerts
+        if (newStatus === 'pending') {
+            const dataArray = viewType === 'weekly' ? barangayData : monthlyReportData;
+            const barangayItem = dataArray.find(item => item.id == barangayId); // Find the correct item in your data
+            if (barangayItem) {
+                const dueDateStatus = getDueDateStatus(barangayItem.dueDate);
+                if (dueDateStatus.status !== 'on-track') { // Only add if there's an alert
+                    taskPanel.classList.add(dueDateStatus.status);
+                    // You might also want to update the alert message display here
+                    let alertMessageSpan = taskPanel.querySelector('.due-date-alert-message');
+                    if (!alertMessageSpan) {
+                        alertMessageSpan = document.createElement('span');
+                        alertMessageSpan.classList.add('due-date-alert-message');
+                        // Find where to insert it, e.g., next to the due date input's parent span
+                        const dueDateSpan = taskPanel.querySelector('.left-status span:nth-child(2)'); // Assuming 2nd span is due date
+                        if (dueDateSpan) {
+                            dueDateSpan.after(alertMessageSpan);
+                        }
+                    }
+                    alertMessageSpan.textContent = dueDateStatus.message;
+                    alertMessageSpan.className = `due-date-alert-message ${dueDateStatus.messageClass}`; // Ensure correct class
+                    alertMessageSpan.style.display = 'inline-block'; // Make sure it's visible
+                } else {
+                     // If no alert needed, hide any existing alert message
+                    const existingAlert = taskPanel.querySelector('.due-date-alert-message');
+                    if(existingAlert) existingAlert.style.display = 'none';
+                }
+            }
+        } else {
+            // If status is not pending, remove any due date alert classes and messages
+            taskPanel.classList.remove('due-soon', 'past-due');
+            const existingAlert = taskPanel.querySelector('.due-date-alert-message');
+            if(existingAlert) existingAlert.style.display = 'none';
+        }
+
+
+        // Update the data model (important for persistence)
+        const dataToUpdate = (viewType === 'weekly' ? barangayData : monthlyReportData).find(b => b.id == barangayId);
+        if (dataToUpdate) {
+            dataToUpdate.status = newStatus;
+            const now = new Date();
+            const formattedNow = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+            dataToUpdate.lastUpdated = formatDate(formattedNow);
+            document.getElementById(`last-updated-${viewType}-${barangayId}`).textContent = `Last Updated: ${dataToUpdate.lastUpdated}`;
+        }
+
+        // Show status update message
+        const messageDiv = selectElement.parentNode.nextElementSibling.nextElementSibling;
+        messageDiv.textContent = `Status updated to ${capitalizeFirstLetter(newStatus)}!`;
+        messageDiv.classList.add(`status-${newStatus === 'accomplished' ? 'success' : (newStatus === 'pending' ? 'warning' : 'error')}`);
+        messageDiv.style.display = 'flex';
+        setTimeout(() => {
+            messageDiv.style.display = 'none';
+            messageDiv.classList.remove(`status-${newStatus === 'accomplished' ? 'success' : (newStatus === 'pending' ? 'warning' : 'error')}`);
+        }, 3000); // Hide after 3 seconds
+
+        updateSelectStyle(selectElement); // Apply correct color to the select element itself
+    }
+
+    // Function to update the style of the select element based on its value
+    function updateSelectStyle(selectElement) {
+        const selectedValue = selectElement.value;
+        selectElement.style.backgroundColor = ''; // Reset
+        selectElement.style.color = 'white'; // Default text color for the select
+
+        switch (selectedValue) {
+            case 'pending':
+                selectElement.style.backgroundColor = '#2F3A7E'; // Primary color
+                break;
+            case 'accomplished':
+                selectElement.style.backgroundColor = '#2ecc71'; // Success color
+                break;
+            case 'not-accomplished':
+                selectElement.style.backgroundColor = '#E92323'; // Danger color
+                break;
+            default:
+                selectElement.style.backgroundColor = '#6c757d'; // A neutral grey for default
+                break;
+        }
+    }
+
+
+    function attachDateChangeListeners() {
+        document.querySelectorAll('.due-date-input').forEach(input => {
+            input.addEventListener('change', function() {
+                const newDueDate = this.value; // YYYY-MM-DD format
+                const barangayId = this.getAttribute('data-barangay-id');
+                const viewType = this.getAttribute('data-view-type');
+
+                // Update the corresponding data item
+                const dataArray = viewType === 'weekly' ? barangayData : monthlyReportData;
+                const item = dataArray.find(b => b.id == barangayId);
+                if (item) {
+                    item.dueDate = newDueDate;
+
+                    // Re-evaluate due date status and update panel/message
+                    const dueDateStatus = getDueDateStatus(newDueDate);
+                    const taskPanel = this.closest('.task-panel'); // Get the parent task panel
+
+                    // Remove existing due date related classes
+                    taskPanel.classList.remove('due-soon', 'past-due');
+
+                    // Remove existing alert message
+                    let alertMessageSpan = taskPanel.querySelector('.due-date-alert-message');
+                    if(alertMessageSpan) {
+                        alertMessageSpan.remove();
+                    }
+
+                    // Only add alert if current status is pending AND there's an alert
+                    if (item.status === 'pending' && dueDateStatus.status !== 'on-track') {
+                        taskPanel.classList.add(dueDateStatus.status); // Add the new class
+                        alertMessageSpan = document.createElement('span');
+                        alertMessageSpan.classList.add('due-date-alert-message', dueDateStatus.messageClass);
+                        alertMessageSpan.textContent = dueDateStatus.message;
+                        this.closest('span').after(alertMessageSpan); // Insert after the due date span
+                    }
+                }
+                console.log(`Due Date for Barangay ${barangayId} (${viewType}) updated to: ${newDueDate}`);
+            });
+        });
+    }
+
+    // NEW FUNCTION: Attach change listeners for month dropdowns
+    function attachMonthChangeListener() {
+        document.querySelectorAll('.monthly-month-select').forEach(selectElement => {
+            selectElement.addEventListener('change', function() {
+                const selectedMonthIndex = parseInt(this.value); // Get the selected month index (0-11)
+                const barangayId = this.getAttribute('data-barangay-id');
+                const selectedMonthName = monthNames[selectedMonthIndex];
+                const displayedYear = new Date().getFullYear(); // Assuming current year for now
+
+                // Update the displayed month text in the h4's sibling div
+                const dateDisplayElement = document.getElementById(`monthly-date-display-${barangayId}`);
+                if (dateDisplayElement) {
+                    dateDisplayElement.textContent = `${selectedMonthName} ${displayedYear}`;
+                }
+                console.log(`Barangay ${barangayId}: Month changed to ${selectedMonthName}`);
+            });
+        });
+    }
+
 </script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
